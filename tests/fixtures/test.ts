@@ -1,4 +1,5 @@
 import { test as base, expect } from '@playwright/test';
+import { PortfolioPage } from '../pages/portfolio.page';
 import { collectPageErrors } from '../support/page-errors';
 import type { Lang, Theme } from '../support/types';
 
@@ -16,6 +17,8 @@ export interface PortfolioOptions {
 }
 
 interface PortfolioFixtures {
+  /** Page object for the site. Not opened yet: call `portfolio.goto()`. */
+  portfolio: PortfolioPage;
   /** Auto fixture: fails the test if the page logged errors or same-origin requests failed. */
   pageErrorGuard: undefined;
 }
@@ -43,6 +46,10 @@ export const test = base.extend<PortfolioOptions & PortfolioFixtures>({
       return;
     }
     await use({ cookies: [], origins: [{ origin: new URL(baseURL).origin, localStorage }] });
+  },
+
+  portfolio: async ({ page }, use) => {
+    await use(new PortfolioPage(page));
   },
 
   pageErrorGuard: [
