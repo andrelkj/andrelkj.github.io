@@ -28,14 +28,18 @@ export default defineConfig({
   },
   use: {
     baseURL,
+    // Pin the locale: the site auto-detects PT from navigator.language when nothing is saved.
+    locale: 'en-US',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
   // Viewports match the widths the site's own QA report claims: 375 / 768 / 1280.
   projects: [
-    { name: 'mobile', use: { ...devices['iPhone SE (3rd gen)'] } },
-    { name: 'tablet', use: { ...devices['iPad Mini'] } },
-    { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
+    { name: 'mobile', testDir: './tests/specs', use: { ...devices['iPhone SE (3rd gen)'] } },
+    { name: 'tablet', testDir: './tests/specs', use: { ...devices['iPad Mini'] } },
+    { name: 'desktop', testDir: './tests/specs', use: { ...devices['Desktop Chrome'] } },
+    // Tests for the test helpers themselves: proves each helper can fail. One browser is enough.
+    { name: 'self-test', testDir: './tests/self-test', use: { ...devices['Desktop Chrome'] } },
   ],
   ...(useLocalServer
     ? {
