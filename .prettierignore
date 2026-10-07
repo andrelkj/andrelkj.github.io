@@ -1,0 +1,6 @@
+# The site files keep their own hand formatting; Prettier only owns the test tooling.
+index.html
+styles.css
+script.js
+assets/
+package-lock.json
