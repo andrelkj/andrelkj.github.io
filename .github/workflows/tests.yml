@@ -53,6 +53,10 @@ jobs:
       - name: Static checks (typecheck, lint, format)
         run: npm run check
 
+      # Every requirement has a test, every test proves a requirement, docs/COVERAGE.md is current.
+      - name: Requirement coverage
+        run: npm run coverage:check
+
       - name: Run Playwright tests
         env:
           REPEAT_EACH: ${{ inputs.repeat_each || 1 }}

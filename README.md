@@ -13,6 +13,7 @@ Generated tests are only useful if you can tell they would actually fail when th
 | Practice                          | What it gives you                                                                                                                                                                                                                                                                                       |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Requirements first**            | [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) states in plain language what is validated (31 IDs) and maps each claim in the site's "Checks run on this site" panel to them. Every test is tagged with the IDs it proves.                                                                              |
+| **Enforced traceability**         | [`docs/COVERAGE.md`](docs/COVERAGE.md) is generated from the annotations and links every requirement to the exact test lines that prove it. CI fails if a requirement has no test, a test proves no requirement, an ID doesn't exist, or the matrix is out of date.                                     |
 | **Deliberate breakage (mutants)** | For every spec, the site was broken on purpose, one change at a time (low contrast, a missing translation, a broken resume link, a theme flash…), and the intended test had to fail with a readable message. Mutants that slipped through led to stronger tests. Each commit message lists its mutants. |
 | **Tests for the tests**           | Every helper (axe scan, overflow finder, translation parity, link checks) has self-tests showing it reports a known-bad page, not just that it passes on a good one.                                                                                                                                    |
 | **Locator contract**              | Every page-object locator must match exactly one element in EN and in PT, so markup drift is named the moment it happens.                                                                                                                                                                               |
@@ -55,6 +56,7 @@ npm test
 | `npm run test:ui`                                        | Playwright UI mode                                                   |
 | `npm run report`                                         | Open the last HTML report (traces and axe results attached)          |
 | `npm run check`                                          | Typecheck, lint and format check                                     |
+| `npm run coverage`                                       | Regenerate `docs/COVERAGE.md` (`coverage:check` is the CI gate)      |
 | `npm run serve`                                          | Serve the site locally on http://localhost:4173                      |
 
 ## Project layout
@@ -62,13 +64,15 @@ npm test
 ```
 index.html, styles.css, script.js, assets/   the site (no build step)
 docs/REQUIREMENTS.md                         what is validated, by ID
+docs/COVERAGE.md                             generated: which tests prove each requirement
 docs/CHANGELOG-TESTS.md                      how the suite grew, phase by phase
 tests/specs/                                 one spec per area, tagged with REQ-IDs
 tests/pages/portfolio.page.ts                the only file that knows the page structure
 tests/fixtures/test.ts                       `test` with theme/lang options and the error guard
 tests/support/                               helpers (axe, layout, i18n, links, keyboard…)
 tests/data/                                  expected values and approved exceptions, each with a reason
-tests/self-test/                             tests for the helpers and the locator contract
+tests/self-test/                             tests for the helpers, the locator contract and the coverage logic
+scripts/coverage/                            coverage matrix generator and rules
 .github/workflows/                           tests on every PR, Pages deploy
 ```
 
@@ -79,6 +83,7 @@ tests/self-test/                             tests for the helpers and the locat
 3. Locate elements through the page object, role-first (`getByRole`, `getByLabel`). Raw selectors live only in `tests/pages/`.
 4. Use web-first assertions and `test.step` for readable reports. Never use sleeps.
 5. Prove it: run it with `--repeat-each=5`, then break the site the way the requirement guards against and confirm the test fails. Note the mutant in the commit message.
+6. Run `npm run coverage` and commit the updated `docs/COVERAGE.md`.
 
 Exceptions are explicit data, never silent: accepted axe findings (`tests/data/axe-exceptions.ts`, scoped and expiring), texts identical in EN and PT (`i18n-same-in-both.ts`, `i18n-fixed-text.ts`). Each entry needs a reason, and stale entries fail the suite.
 
@@ -113,8 +118,8 @@ The suite is developed in phases, one pull request per phase, in small commits. 
 | 1. Scaffold: tooling, config, CI                                                                         | ✅ Done      |
 | 2. Infrastructure: fixtures, page object, self-tested helpers                                            | ✅ Done      |
 | 3. Requirements and specs                                                                                | ✅ Done      |
-| 4. Visual baselines (screenshots per device × theme)                                                     | 🔄 In review |
-| 5. Coverage matrix: CI fails if a requirement has no test, or a test has no requirement                  | Planned      |
+| 4. Visual baselines (screenshots per device × theme)                                                     | ✅ Done      |
+| 5. Coverage matrix: CI fails if a requirement has no test, or a test has no requirement                  | 🔄 In review |
 | 6. Automated mutation runner and `docs/TRUST.md` scorecard                                               | Planned      |
 | 7. Claude Code skills (`qa-plan`, `pw-write-test`, `pw-review`, `pw-heal`, `a11y-triage`, `trust-audit`) | Planned      |
 | 8. Deploy gated on tests, post-deploy smoke, nightly external link check                                 | Planned      |

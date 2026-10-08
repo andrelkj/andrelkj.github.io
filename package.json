@@ -17,7 +17,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run typecheck && npm run lint && npm run format:check"
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "coverage": "tsx scripts/coverage/coverage-matrix.ts",
+    "coverage:check": "tsx scripts/coverage/coverage-matrix.ts --check"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
