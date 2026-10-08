@@ -4,7 +4,7 @@ This file is the source of truth for **what the suite validates**. Each requirem
 
 Unless a requirement says otherwise, it must hold on every project: **mobile** (375 px, WebKit), **tablet** (768 px, WebKit) and **desktop** (1280 px, Chromium).
 
-Which tests prove each requirement is generated into `docs/COVERAGE.md` (phase 5).
+Which tests prove each requirement is generated into [`COVERAGE.md`](COVERAGE.md) by `npm run coverage`. CI fails if a requirement has no test or a test proves no requirement.
 
 ## Health
 
