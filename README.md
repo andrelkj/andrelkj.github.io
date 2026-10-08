@@ -87,6 +87,18 @@ Exceptions are explicit data, never silent: accepted axe findings (`tests/data/a
 Edit the English text in `index.html`, then add or update the matching `data-i18n` key in the `PT` dictionary in `script.js`. Screen-reader labels work the same way: an element with `aria-label` gets a `data-i18n-label` key.
 Text that stays identical in both languages (names, tools, code) has no key and must be on the approved list in `tests/data/i18n-fixed-text.ts`, otherwise the i18n tests fail.
 
+## Visual baselines
+
+Screenshots (first screen + full page, dark and light, on every device) are compared with reviewed baselines in `tests/specs/visual.spec.ts-snapshots/`. Font rendering differs between operating systems, so baselines are **Linux-only**: they're generated and compared inside the pinned Playwright container in CI. On macOS and Windows the visual tests are skipped with a reason.
+
+To update baselines after an intentional design change:
+
+1. In GitHub Actions, run the **Tests** workflow on your branch with `update_snapshots` checked. (A new screenshot with no baseline is also written automatically on any run.)
+2. Download the `visual-baselines` artifact and **look at every image**: a baseline is an approval.
+3. Copy the PNGs into `tests/specs/visual.spec.ts-snapshots/` and commit them in their own commit.
+
+CI never commits baselines by itself. `VISUAL_LOCAL=1 npm test` runs the visual tests locally against git-ignored, machine-specific baselines, for experiments only.
+
 ## CI and deploy
 
 - **Every PR** runs `.github/workflows/tests.yml` inside the pinned Playwright container: typecheck, lint, format check and the full suite. The HTML report is uploaded as an artifact.
@@ -100,8 +112,8 @@ The suite is developed in phases, one pull request per phase, in small commits. 
 | -------------------------------------------------------------------------------------------------------- | ------------ |
 | 1. Scaffold: tooling, config, CI                                                                         | ✅ Done      |
 | 2. Infrastructure: fixtures, page object, self-tested helpers                                            | ✅ Done      |
-| 3. Requirements and specs                                                                                | 🔄 In review |
-| 4. Visual baselines (screenshots per device × theme)                                                     | Planned      |
+| 3. Requirements and specs                                                                                | ✅ Done      |
+| 4. Visual baselines (screenshots per device × theme)                                                     | 🔄 In review |
 | 5. Coverage matrix: CI fails if a requirement has no test, or a test has no requirement                  | Planned      |
 | 6. Automated mutation runner and `docs/TRUST.md` scorecard                                               | Planned      |
 | 7. Claude Code skills (`qa-plan`, `pw-write-test`, `pw-review`, `pw-heal`, `a11y-triage`, `trust-audit`) | Planned      |

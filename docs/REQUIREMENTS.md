@@ -73,9 +73,9 @@ Which tests prove each requirement is generated into `docs/COVERAGE.md` (phase 5
 
 ## Visual
 
-| ID         | Requirement                                                                                            |
-| ---------- | ------------------------------------------------------------------------------------------------------ |
-| REQ-VIS-01 | The page looks as approved (screenshot baselines) on every project in both themes. _Planned: phase 4._ |
+| ID         | Requirement                                                                                                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| REQ-VIS-01 | The page looks as approved: first screen and full page match the reviewed screenshot baselines on every project, in both themes. Baselines are generated only in the Linux Playwright container. |
 
 ## The site's own QA report → requirements
 

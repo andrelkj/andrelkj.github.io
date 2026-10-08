@@ -115,6 +115,37 @@ export class PortfolioPage {
     return this.page.locator(`a[href="${href}"]`);
   }
 
+  /**
+   * Waits for web fonts and reports whether Inter and JetBrains Mono actually loaded. Screenshots
+   * taken with fallback fonts would differ from the baselines for reasons unrelated to the site.
+   */
+  async webFontsLoaded(): Promise<boolean> {
+    return this.page.evaluate(async () => {
+      await document.fonts.ready;
+      return (
+        document.fonts.check('400 16px Inter') && document.fonts.check('400 16px "JetBrains Mono"')
+      );
+    });
+  }
+
+  /**
+   * Resizes the viewport to the page's full height (rounded up to whole pixels) so the whole page
+   * can be captured as a plain viewport screenshot. Playwright's `fullPage` capture isn't used:
+   * the page is 6948.23px tall on desktop, and Chromium rounds that fractional height
+   * inconsistently between consecutive shots (6948 vs 6949), even with a `clip`.
+   */
+  async expandViewportToFullPage(): Promise<void> {
+    const size = await this.page.evaluate(() => ({
+      width: window.innerWidth,
+      height: Math.ceil(document.body.getBoundingClientRect().height),
+    }));
+    await this.page.setViewportSize(size);
+    // A full-height viewport is "at the bottom", so the site's resize handler marks Contact as
+    // current. Wait for that state: in WebKit the handler can run after a frame, which made the
+    // tablet screenshot flip between "Contact current" and "not current" between shots.
+    await this.topBar.nav.locator('a[aria-current="true"][href="#contact"]').waitFor();
+  }
+
   /** A content section by id. */
   section(id: Section): Locator {
     return this.page.locator(`section#${id}`);

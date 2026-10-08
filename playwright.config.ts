@@ -24,7 +24,7 @@ export default defineConfig({
     ['json', { outputFile: 'test-results/results.json' }],
   ],
   expect: {
-    toHaveScreenshot: { animations: 'disabled', caret: 'hide' },
+    toHaveScreenshot: { animations: 'disabled', caret: 'hide', threshold: 0.05 },
   },
   use: {
     baseURL,

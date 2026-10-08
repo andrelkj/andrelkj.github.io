@@ -9,3 +9,7 @@ playwright/.cache/
 
 # OS
 .DS_Store
+
+# Visual baselines are Linux-only (generated in the Playwright container); local ones are never committed
+*-darwin.png
+*-win32.png
