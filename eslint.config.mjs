@@ -23,8 +23,13 @@ export default tseslint.config(
     },
   },
   {
+    // Plain Node scripts (eslint config, skill helper scripts).
     files: ['**/*.mjs'],
     ...tseslint.configs.disableTypeChecked,
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: { console: 'readonly', process: 'readonly' },
+    },
   },
   {
     // Rules for every file that runs inside the Playwright test runner.
