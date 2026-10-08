@@ -20,6 +20,8 @@ for (const lang of LANGS) {
         'topBar.nav': topBar.nav,
         'topBar.languageSwitch': topBar.languageSwitch,
         'topBar.themeToggle': topBar.themeToggle,
+        'topBar.themeIcon(sun)': topBar.themeIcon('sun'),
+        'topBar.themeIcon(moon)': topBar.themeIcon('moon'),
         'topBar.languageButton(en)': topBar.languageButton('en'),
         'topBar.languageButton(pt)': topBar.languageButton('pt'),
         html: portfolio.html,

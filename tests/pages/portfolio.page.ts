@@ -41,6 +41,11 @@ export class TopBar {
     return this.nav.locator(`a[href="#${section}"]`);
   }
 
+  /** The sun (shown in dark theme) or moon (shown in light theme) icon inside the toggle. */
+  themeIcon(icon: 'sun' | 'moon'): Locator {
+    return this.themeToggle.locator(`svg.icon-${icon}`);
+  }
+
   /** The EN or PT button of the language switch. */
   languageButton(lang: Lang): Locator {
     return this.languageSwitch.getByRole('button', { name: lang.toUpperCase(), exact: true });
