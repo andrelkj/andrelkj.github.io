@@ -115,6 +115,19 @@ export class PortfolioPage {
     return this.page.locator(`a[href="${href}"]`);
   }
 
+  /**
+   * Waits for web fonts and reports whether Inter and JetBrains Mono actually loaded. Screenshots
+   * taken with fallback fonts would differ from the baselines for reasons unrelated to the site.
+   */
+  async webFontsLoaded(): Promise<boolean> {
+    return this.page.evaluate(async () => {
+      await document.fonts.ready;
+      return (
+        document.fonts.check('400 16px Inter') && document.fonts.check('400 16px "JetBrains Mono"')
+      );
+    });
+  }
+
   /** A content section by id. */
   section(id: Section): Locator {
     return this.page.locator(`section#${id}`);
