@@ -1,7 +1,14 @@
 import { COPY, UI_NAMES } from '../data/copy';
+import { FIXED_TEXT } from '../data/i18n-fixed-text';
 import { SAME_IN_BOTH } from '../data/i18n-same-in-both';
 import { expect, req, test } from '../fixtures/test';
-import { findTranslationGaps, readAuthoredTranslations, readTranslations } from '../support/i18n';
+import {
+  findTranslationGaps,
+  findUntranslatedUnkeyed,
+  readAuthoredTranslations,
+  readTranslations,
+  readUnkeyedTexts,
+} from '../support/i18n';
 import { HTML_LANG, LANGS } from '../support/types';
 
 test.describe('languages', { tag: '@i18n' }, () => {
@@ -19,6 +26,20 @@ test.describe('languages', { tag: '@i18n' }, () => {
         const pt = await readTranslations(page);
 
         expect(findTranslationGaps(en, pt, SAME_IN_BOTH)).toEqual([]);
+      },
+    );
+
+    test(
+      'text without a translation key is only names, tools and code',
+      { annotation: req('REQ-I18N-07') },
+      async ({ page, portfolio }) => {
+        await portfolio.goto();
+        const en = await readUnkeyedTexts(page);
+
+        await portfolio.switchLanguage('pt');
+        const pt = await readUnkeyedTexts(page);
+
+        expect(findUntranslatedUnkeyed(en, pt, FIXED_TEXT)).toEqual([]);
       },
     );
 

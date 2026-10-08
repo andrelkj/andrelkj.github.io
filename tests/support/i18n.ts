@@ -69,3 +69,64 @@ export function findTranslationGaps(
   }
   return gaps;
 }
+
+/** Text that has no translation key and is meant to stay the same in every language. */
+export interface FixedText {
+  /** Exact text, or a pattern for families such as commit hashes. */
+  readonly match: string | RegExp;
+  readonly reason: string;
+}
+
+/**
+ * Lists everything a visitor can read or hear that has NO translation key: text nodes outside
+ * `[data-i18n]` and the values of aria-label / alt / title attributes. Decorative content
+ * (`aria-hidden="true"`) is skipped. Whitespace is collapsed; strings without letters are dropped.
+ */
+export async function readUnkeyedTexts(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const clean = (text: string): string => text.replace(/\s+/g, ' ').trim();
+    const hasLetters = (text: string): boolean => /\p{L}/u.test(text);
+    const skipped = '[data-i18n], [aria-hidden="true"], script, style, noscript';
+    const texts: string[] = [];
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const text = clean(node.textContent ?? '');
+      if (hasLetters(text) && !node.parentElement?.closest(skipped)) texts.push(text);
+    }
+    for (const el of document.body.querySelectorAll('[aria-label], [alt], [title]')) {
+      if (el.closest('[aria-hidden="true"]')) continue;
+      for (const attr of ['aria-label', 'alt', 'title']) {
+        const value = clean(el.getAttribute(attr) ?? '');
+        if (hasLetters(value)) texts.push(value);
+      }
+    }
+    return texts;
+  });
+}
+
+/**
+ * Compares the unkeyed texts of the EN and PT renderings. A text present in both is
+ * untranslated; it must match a `fixed` entry. Also reports fixed entries that match nothing
+ * (stale). An empty result means every unkeyed text is either translated or approved.
+ */
+export function findUntranslatedUnkeyed(
+  en: readonly string[],
+  pt: readonly string[],
+  fixed: readonly FixedText[],
+): string[] {
+  const inEnglish = new Set(en);
+  const matches = (entry: FixedText, text: string): boolean =>
+    typeof entry.match === 'string' ? entry.match === text : entry.match.test(text);
+
+  const untranslated = [...new Set(pt.filter((text) => inEnglish.has(text)))];
+  const problems = untranslated
+    .filter((text) => !fixed.some((entry) => matches(entry, text)))
+    .map((text) => `"${text}": same in EN and PT, and not on the fixed-text list`);
+  for (const entry of fixed) {
+    if (!untranslated.some((text) => matches(entry, text))) {
+      problems.push(`${String(entry.match)}: on the fixed-text list but not on the page`);
+    }
+  }
+  return problems;
+}

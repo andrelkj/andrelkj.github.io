@@ -33,14 +33,15 @@ Which tests prove each requirement is generated into `docs/COVERAGE.md` (phase 6
 
 ## Languages (EN / PT-BR)
 
-| ID          | Requirement                                                                                                                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| REQ-I18N-01 | Every translatable text is translated to PT. Texts that are meant to read the same in both languages are listed with a reason (`tests/data/i18n-same-in-both.ts`), and that list can't go stale. |
-| REQ-I18N-02 | Switching language updates `html[lang]` (`en` / `pt-BR`), the pressed state of the EN/PT buttons, and the accessible names of the language group and theme toggle.                               |
-| REQ-I18N-03 | English shows exactly the text authored in `index.html` (markup included), on first load and after switching PT → EN.                                                                            |
-| REQ-I18N-04 | The chosen language is remembered after a reload.                                                                                                                                                |
-| REQ-I18N-05 | A first-time visitor whose browser language is Portuguese gets PT. Anyone else gets EN.                                                                                                          |
-| REQ-I18N-06 | Key headings read exactly as expected in each language (catches swapped or wrong translations that the parity check can't see).                                                                  |
+| ID          | Requirement                                                                                                                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| REQ-I18N-01 | Every translatable text is translated to PT. Texts that are meant to read the same in both languages are listed with a reason (`tests/data/i18n-same-in-both.ts`), and that list can't go stale.        |
+| REQ-I18N-02 | Switching language updates `html[lang]` (`en` / `pt-BR`), the pressed state of the EN/PT buttons, and the accessible names of the language group and theme toggle.                                      |
+| REQ-I18N-03 | English shows exactly the text authored in `index.html` (markup included), on first load and after switching PT → EN.                                                                                   |
+| REQ-I18N-04 | The chosen language is remembered after a reload.                                                                                                                                                       |
+| REQ-I18N-05 | A first-time visitor whose browser language is Portuguese gets PT. Anyone else gets EN.                                                                                                                 |
+| REQ-I18N-06 | Key headings read exactly as expected in each language (catches swapped or wrong translations that the parity check can't see).                                                                         |
+| REQ-I18N-07 | Text without a translation key (including screen-reader labels) is limited to an approved list of names, tools and code (`tests/data/i18n-fixed-text.ts`), so new copy can't silently skip translation. |
 
 ## Responsive layout
 
@@ -85,7 +86,7 @@ The page's "Checks run on this site" panel makes seven claims. This is where eac
 | axe-core scan, WCAG 2.2 AA + best practices, 0 violations, dark and light                | REQ-A11Y-01, REQ-THEME-04                                        |
 | Layout at 375 / 768 / 1280 px: no horizontal overflow                                    | REQ-RESP-01                                                      |
 | Every mobile nav tab ≥ 44 px tall                                                        | REQ-RESP-02                                                      |
-| EN / PT-BR: every string translated, nav fits in both languages                          | REQ-I18N-01, REQ-RESP-04                                         |
+| EN / PT-BR: every string translated, nav fits in both languages                          | REQ-I18N-01, REQ-I18N-07, REQ-RESP-04                            |
 | Active section correct to the last one; header hide/show, keyboard focus, reduced motion | REQ-NAV-01, REQ-RESP-03, REQ-A11Y-02, REQ-A11Y-03                |
 | Links and assets resolve (resume PDF, icon); no console errors                           | REQ-LINK-01…05, REQ-HEALTH-02                                    |
 | Content: claims checked against the resume; scan for internal jargon                     | Not automated: this is an editorial review, not a page behavior. |
