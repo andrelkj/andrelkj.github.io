@@ -13,6 +13,10 @@ on:
         description: Run every test this many times (flake check in the CI container)
         type: number
         default: 1
+      grep:
+        description: Only run tests matching this pattern, e.g. @visual (empty = all)
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -28,7 +32,8 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Repeat runs take a multiple of the normal ~6 min; expressions have no arithmetic, hence 90.
+    timeout-minutes: ${{ inputs.repeat_each > 1 && 90 || 15 }}
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
     steps:
@@ -52,7 +57,8 @@ jobs:
         env:
           REPEAT_EACH: ${{ inputs.repeat_each || 1 }}
           UPDATE_FLAG: ${{ inputs.update_snapshots && '--update-snapshots' || '' }}
-        run: npx playwright test --repeat-each="$REPEAT_EACH" $UPDATE_FLAG
+          GREP: ${{ inputs.grep || '' }}
+        run: npx playwright test --repeat-each="$REPEAT_EACH" $UPDATE_FLAG ${GREP:+--grep "$GREP"}
 
       - name: Upload HTML report
         if: ${{ !cancelled() }}
