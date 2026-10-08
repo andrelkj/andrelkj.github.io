@@ -74,6 +74,21 @@ export class PortfolioPage {
     // script.js sets aria-pressed on the language buttons during init; once one is pressed,
     // translations and labels have been applied.
     await this.topBar.languageSwitch.locator('[aria-pressed="true"]').waitFor();
+    await this.waitForIntroAnimations();
+  }
+
+  /**
+   * Waits until every finite CSS animation has finished (the hero's line-by-line reveal takes
+   * ~2.8 s). Half-faded text would give axe false contrast failures and make screenshots flaky.
+   * Infinite animations (blinking caret, status dot) are decorative and ignored.
+   */
+  async waitForIntroAnimations(): Promise<void> {
+    await this.page.waitForFunction(() =>
+      document
+        .getAnimations()
+        .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+        .every((animation) => animation.playState === 'finished'),
+    );
   }
 
   /** A content section by id. */
