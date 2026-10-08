@@ -37,7 +37,7 @@ Which tests prove each requirement is generated into `docs/COVERAGE.md` (phase 6
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | REQ-I18N-01 | Every translatable text is translated to PT. Texts that are meant to read the same in both languages are listed with a reason (`tests/data/i18n-same-in-both.ts`), and that list can't go stale. |
 | REQ-I18N-02 | Switching language updates `html[lang]` (`en` / `pt-BR`), the pressed state of the EN/PT buttons, and the accessible names of the language group and theme toggle.                               |
-| REQ-I18N-03 | Switching PT → EN restores the original English exactly.                                                                                                                                         |
+| REQ-I18N-03 | English shows exactly the text authored in `index.html` (markup included), on first load and after switching PT → EN.                                                                            |
 | REQ-I18N-04 | The chosen language is remembered after a reload.                                                                                                                                                |
 | REQ-I18N-05 | A first-time visitor whose browser language is Portuguese gets PT. Anyone else gets EN.                                                                                                          |
 | REQ-I18N-06 | Key headings read exactly as expected in each language (catches swapped or wrong translations that the parity check can't see).                                                                  |

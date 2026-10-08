@@ -23,6 +23,22 @@ export async function readTranslations(page: Page): Promise<TranslationMap> {
 }
 
 /**
+ * Reads the `[data-i18n]` texts as authored in the HTML source, before any script runs.
+ * The source is fetched and parsed with DOMParser (which never executes scripts), so this is
+ * the English the author wrote, independent of what script.js does with it.
+ */
+export async function readAuthoredTranslations(page: Page, path = '/'): Promise<TranslationMap> {
+  const entries = await page.evaluate(async (url) => {
+    const source = await (await fetch(url)).text();
+    const doc = new DOMParser().parseFromString(source, 'text/html');
+    return [...doc.querySelectorAll<HTMLElement>('[data-i18n]')].map(
+      (el) => [el.dataset.i18n ?? '', el.innerHTML.replace(/\s+/g, ' ').trim()] as const,
+    );
+  }, path);
+  return new Map(entries);
+}
+
+/**
  * Compares the EN and PT renderings of the page and lists every problem:
  * - a key with an empty PT value,
  * - a key whose PT value is identical to EN (untranslated) and not in `sameInBoth`,

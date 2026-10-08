@@ -28,10 +28,13 @@ export class TopBar {
   readonly nav: Locator;
   readonly languageSwitch: Locator;
   readonly themeToggle: Locator;
+  /** The section links of the primary nav, in order (the brand link is not included). */
+  readonly navLinks: Locator;
 
   constructor(page: Page) {
     this.root = page.getByRole('banner');
     this.nav = this.root.getByRole('navigation', { name: 'Primary' });
+    this.navLinks = this.nav.getByRole('list').getByRole('link');
     this.languageSwitch = this.root.getByRole('group', { name: /^(Language|Idioma)$/ });
     this.themeToggle = this.root.getByRole('button', { name: /theme|tema/i });
   }
@@ -60,6 +63,8 @@ export class PortfolioPage {
   readonly html: Locator;
   readonly main: Locator;
   readonly heading: Locator;
+  /** The `h2` of every content section, in page order. */
+  readonly sectionHeadings: Locator;
   readonly skipLink: Locator;
   readonly footer: Locator;
 
@@ -69,6 +74,7 @@ export class PortfolioPage {
     this.html = page.locator('html');
     this.main = page.getByRole('main');
     this.heading = page.getByRole('heading', { level: 1 });
+    this.sectionHeadings = this.main.getByRole('heading', { level: 2 });
     this.skipLink = page.locator('a.skip-link');
     this.footer = page.getByRole('contentinfo');
   }

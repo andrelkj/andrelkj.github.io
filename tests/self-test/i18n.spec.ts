@@ -1,5 +1,5 @@
 import { expect, test } from '../fixtures/test';
-import { findTranslationGaps, readTranslations } from '../support/i18n';
+import { findTranslationGaps, readAuthoredTranslations, readTranslations } from '../support/i18n';
 
 const en = new Map([
   ['nav.about', 'About'],
@@ -46,6 +46,22 @@ test.describe('readTranslations', () => {
         ['a', 'Hello <strong>world</strong>'],
         ['b', 'x'],
       ]),
+    );
+  });
+});
+
+test.describe('readAuthoredTranslations', () => {
+  test('reads the source HTML, ignoring changes made by scripts', async ({ page }) => {
+    const source = `<p data-i18n="a">Hi <strong>there</strong></p>
+      <script>document.querySelector('[data-i18n=a]').textContent = 'changed';</script>`;
+    await page.route('**/authored-fixture.html', (route) =>
+      route.fulfill({ body: source, contentType: 'text/html' }),
+    );
+    await page.goto('/authored-fixture.html');
+    expect(await readTranslations(page)).toEqual(new Map([['a', 'changed']]));
+
+    expect(await readAuthoredTranslations(page, '/authored-fixture.html')).toEqual(
+      new Map([['a', 'Hi <strong>there</strong>']]),
     );
   });
 });
