@@ -140,8 +140,10 @@ export class PortfolioPage {
       height: Math.ceil(document.body.getBoundingClientRect().height),
     }));
     await this.page.setViewportSize(size);
-    // One frame for the site's resize handlers (active nav, header) to settle.
-    await this.page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
+    // A full-height viewport is "at the bottom", so the site's resize handler marks Contact as
+    // current. Wait for that state: in WebKit the handler can run after a frame, which made the
+    // tablet screenshot flip between "Contact current" and "not current" between shots.
+    await this.topBar.nav.locator('a[aria-current="true"][href="#contact"]').waitFor();
   }
 
   /** A content section by id. */
