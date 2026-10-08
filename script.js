@@ -24,6 +24,7 @@
     "nav.stack": "Stack",
     "nav.contact": "Contato",
 
+    "hero.tagline": "Playwright · C# · API · Mobile · QA com IA",
     "hero.status": "Aberto a vagas de Sr QA / SDET · Remoto · Curitiba, BR (UTC−3)",
     "hero.role": "Sr. QA Engineer / Software Engineer in Test",
     "hero.lede": "Construo automação de testes em que o time pode confiar, em web, iOS e Android, para produtos de fintech e iGaming.",
@@ -33,12 +34,18 @@
     "cta.resume": "Baixar currículo",
 
     "run.header": "Executando 5 testes com 1 worker",
+    "run.l1": "experiência ›",
+    "run.l2": "plataformas ›",
+    "run.l3": "migrações ›",
+    "run.l4": "ia ›",
+    "run.l5": "escala ›",
     "run.t1": "4+ anos · fintech &amp; iGaming",
     "run.t3": "tempo de regressão reduzido em 80%+",
     "run.t4": "planejamento de testes: 3–4 dias → ~2 horas",
     "run.t5": "migração de site com 500+ páginas validada",
     "run.summary": "5 passaram",
 
+    "about.eyebrow": "// sobre",
     "about.title": "Qualidade que vai junto com o código.",
     "about.p1": "Sou Sr. QA Engineer e Software Engineer in Test com <strong>4+ anos</strong> construindo e mantendo automação de testes para plataformas de fintech e iGaming. Escrevo testes em <strong>Playwright (C#/.NET e TypeScript)</strong> e <strong>Cypress</strong>, testo e simulo APIs com Postman, Charles Proxy e Mockoon, e automatizo apps mobile nativos com <strong>XCUITest</strong> e <strong>Espresso</strong>.",
     "about.p2": "Gosto de ser responsável pela qualidade de ponta a ponta em times remotos: estratégia de testes, regressão multiplataforma e migração de frameworks. Cada vez mais meu trabalho envolve <strong>QA assistido por IA</strong>, como gerar suítes de teste com servidores MCP, transformar requisitos em planos de teste e usar IA para revisar código. É nessa área que quero crescer: <strong>testar produtos com IA e construir ferramentas de IA</strong> para times de engenharia.",
@@ -51,6 +58,7 @@
     "about.c4.t": "QA com IA",
     "about.c4.d": "Geração de testes via MCP, automação de requisitos para planos de teste e revisão de código assistida por IA.",
 
+    "exp.eyebrow": "// git log --autor=andre",
     "exp.title": "Experiência",
     "exp.head": "HEAD → atual",
     "exp.k.role": "Software Engineer in Test",
@@ -70,10 +78,12 @@
     "exp.q.b5": "Automatizei <strong>200+ testes funcionais</strong> e implementei revisão de código assistida por IA antes dos PRs, reduzindo idas e vindas nas revisões.",
     "exp.t.role": "Analista de QA de Software",
     "exp.t.date": "Jun 2020 – Jan 2023",
+    "exp.t.loc": "Curitiba, Brasil",
     "exp.t.b1": "Responsável pelo planejamento de testes e pela cobertura de casos extremos nos lançamentos de produto, encontrando defeitos antes do lançamento.",
     "exp.t.b2": "Melhorei os fluxos de testes funcionais, mantendo múltiplas plataformas estáveis ao longo dos ciclos de release.",
     "exp.t.chip": "Testes funcionais",
 
+    "work.eyebrow": "// projetos em destaque",
     "work.title": "Projetos em destaque",
     "lbl.context": "contexto",
     "lbl.approach": "abordagem",
@@ -100,8 +110,13 @@
     "work.training": "$ ls ~/projetos-de-curso",
     "work.w3.link": "→ veja aplicado neste site",
 
+    "ai.eyebrow": "// git log --oneline redesenho",
     "ai.title": "Como este site foi feito",
     "ai.lede": "Esta página é um exemplo do fluxo de trabalho com IA que uso no dia a dia. Eu a construí em uma sessão com o <strong>Claude Code</strong>: eu defini a direção, tomei as decisões de conteúdo e design e revisei cada mudança. A IA pesquisou, implementou e testou em um navegador real.",
+    "ai.s1.k": "01 · auditoria",
+    "ai.s2.k": "02 · planejamento",
+    "ai.s3.k": "03 · iteração",
+    "ai.s4.k": "04 · verificação",
     "ai.s1.t": "Primeiro, checar os fatos",
     "ai.s1.d": "Comparei o site antigo com meu currículo e LinkedIn. Ele exagerava a experiência, omitia um empregador atual e mostrava números que eu não conseguia comprovar. Nova regra: toda afirmação precisa vir do currículo, e nenhum número é inventado.",
     "ai.s2.t": "Decidir pensando em quem lê",
@@ -130,6 +145,7 @@
     "ai.roles": "<strong>Eu:</strong> direção, conteúdo, decisões de UX, revisão e aprovação. <strong>IA:</strong> pesquisa, código, testes no navegador, commits. <strong>Ferramentas:</strong> Claude Code, axe-core, git, GitHub Pages.",
     "footer.built": "feito com IA, testado por um QA",
 
+    "stack.eyebrow": "// cat ferramentas.json",
     "stack.title": "Ferramentas que uso",
     "stack.web": "web",
     "stack.mobile": "mobile",
@@ -150,6 +166,7 @@
     "stack.p4": "Testes de acessibilidade",
     "stack.p5": "Melhoria de processos",
 
+    "edu.eyebrow": "// formação",
     "edu.title": "Formação &amp; reconhecimento",
     "edu.k1": "formação",
     "edu.degree": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
@@ -165,8 +182,13 @@
     "edu.es": "Espanhol",
     "edu.basic": "básico",
 
+    "contact.eyebrow": "// ./contato --agora",
     "contact.title": "Vamos falar sobre qualidade.",
-    "contact.text": "Procurando um Sr. QA Engineer ou SDET para cuidar da automação em web, mobile e APIs, ou alguém animado para testar produtos com IA? Vou gostar de conversar."
+    "contact.text": "Procurando um Sr. QA Engineer ou SDET para cuidar da automação em web, mobile e APIs, ou alguém animado para testar produtos com IA? Vou gostar de conversar.",
+
+    "label.nav": "Principal",
+    "label.career": "Resumo da carreira no formato de uma execução de testes aprovada",
+    "label.tech": "Tecnologias"
   };
 
   const UI = {
@@ -178,6 +200,10 @@
   const EN = {};
   nodes.forEach((el) => { EN[el.dataset.i18n] = el.innerHTML; });
 
+  // Accessible names (aria-label) are translated the same way, keyed by data-i18n-label.
+  const labelled = Array.from(document.querySelectorAll("[data-i18n-label]"));
+  labelled.forEach((el) => { EN[el.dataset.i18nLabel] = el.getAttribute("aria-label"); });
+
   let lang = "en";
 
   function setLang(next) {
@@ -186,6 +212,10 @@
     nodes.forEach((el) => {
       const value = dict[el.dataset.i18n];
       if (value !== undefined) el.innerHTML = value;
+    });
+    labelled.forEach((el) => {
+      const value = dict[el.dataset.i18nLabel];
+      if (value !== undefined) el.setAttribute("aria-label", value);
     });
     root.lang = lang === "pt" ? "pt-BR" : "en";
     document.querySelectorAll(".lang-switch button").forEach((b) => {

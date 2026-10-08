@@ -38,7 +38,7 @@ export class TopBar {
 
   constructor(page: Page) {
     this.root = page.getByRole('banner');
-    this.nav = this.root.getByRole('navigation', { name: 'Primary' });
+    this.nav = this.root.getByRole('navigation', { name: /^(Primary|Principal)$/ });
     this.navLinks = this.nav.getByRole('list').getByRole('link');
     this.currentNavLink = this.nav.locator('a[aria-current="true"]');
     this.languageSwitch = this.root.getByRole('group', { name: /^(Language|Idioma)$/ });
