@@ -19,6 +19,13 @@ test.describe('findHorizontalOverflow', () => {
     expect(problems).toContain('div#wide.banner ends at 600px');
   });
 
+  test('still finds content cut off by body { overflow-x: hidden }', async ({ page: p }) => {
+    await p.setContent(
+      page('<style>body{overflow-x:hidden}</style><div id="wide" style="width:600px">cut</div>'),
+    );
+    expect(await findHorizontalOverflow(p)).toContain('div#wide ends at 600px');
+  });
+
   test('ignores content inside a horizontal scroller', async ({ page: p }) => {
     await p.setContent(
       page('<ul style="overflow-x:auto;display:flex"><li style="min-width:600px">tab</li></ul>'),

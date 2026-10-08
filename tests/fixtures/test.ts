@@ -64,3 +64,11 @@ export const test = base.extend<PortfolioOptions & PortfolioFixtures>({
 });
 
 export { expect };
+
+/** A requirement ID from docs/REQUIREMENTS.md. */
+export type ReqId = `REQ-${string}-${string}`;
+
+/** Test annotations linking a test to the requirements it proves (read by the coverage matrix). */
+export function req(...ids: readonly ReqId[]): { type: 'req'; description: ReqId }[] {
+  return ids.map((id) => ({ type: 'req', description: id }));
+}

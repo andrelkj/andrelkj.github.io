@@ -1,5 +1,5 @@
 import { expect, test } from '../fixtures/test';
-import { collectLinks, findBrokenAnchors, findUnsafeLinks } from '../support/links';
+import { collectLinks, findBrokenAnchors, findUnsafeLinks, svgRootName } from '../support/links';
 
 const LINKS_PAGE = `
   <section id="about">About</section>
@@ -41,5 +41,13 @@ test.describe('link helpers', () => {
 
   test('findBrokenAnchors flags ids that do not exist', async ({ page }) => {
     expect(await findBrokenAnchors(page)).toEqual(['#missing: no element with this id']);
+  });
+});
+
+test.describe('svgRootName', () => {
+  test('accepts a valid SVG and rejects broken or non-SVG text', async ({ page }) => {
+    expect(await svgRootName(page, '<svg xmlns="http://www.w3.org/2000/svg"></svg>')).toBe('svg');
+    expect(await svgRootName(page, '<svg xmlns="http://www.w3.org/2000/svg">')).toBe('parsererror');
+    expect(await svgRootName(page, '<html><body>404</body></html>')).toBe('html');
   });
 });

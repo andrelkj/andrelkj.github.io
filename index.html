@@ -46,7 +46,7 @@
   <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
 
   <header class="topbar">
-    <nav class="nav container" aria-label="Primary">
+    <nav class="nav container" aria-label="Primary" data-i18n-label="label.nav">
       <a class="brand" href="#top"><span class="prompt">&gt;_</span> andre<span class="muted">.kreutzer</span></a>
 
       <ul class="nav-links" id="nav-links">
@@ -77,7 +77,7 @@
         <p class="status"><span class="dot" aria-hidden="true"></span><span data-i18n="hero.status">Open to Sr QA / SDET roles · Remote · Curitiba, BR (UTC−3)</span></p>
         <h1>André Kreutzer<span class="caret" aria-hidden="true">_</span></h1>
         <p class="role" data-i18n="hero.role">Sr. QA Engineer / Software Engineer in Test</p>
-        <p class="tagline mono">Playwright · C# · API · Mobile · AI-assisted QA</p>
+        <p class="tagline mono" data-i18n="hero.tagline">Playwright · C# · API · Mobile · AI-assisted QA</p>
         <p class="lede" data-i18n="hero.lede">I build test automation that teams can trust, across web, iOS and Android, for fintech and iGaming products.</p>
         <p class="interest mono"><span class="accent" data-i18n="hero.interestLabel">interested_in:</span> <span data-i18n="hero.interest">AI testing · AI engineering</span></p>
 
@@ -92,7 +92,7 @@
         </div>
       </div>
 
-      <figure class="terminal" aria-label="Career summary formatted as a passing test run">
+      <figure class="terminal" aria-label="Career summary formatted as a passing test run" data-i18n-label="label.career">
         <div class="term-bar" aria-hidden="true">
           <span></span><span></span><span></span>
           <p class="mono">andre@qa: ~/career</p>
@@ -100,11 +100,11 @@
         <div class="term-body mono">
           <p class="run-line" style="--i:0"><span class="accent">$</span> npx playwright test --reporter=list</p>
           <p class="run-line dim" style="--i:1" data-i18n="run.header">Running 5 tests using 1 worker</p>
-          <p class="run-line" style="--i:2"><span class="pass">✓</span> <span class="dim">experience ›</span> <span data-i18n="run.t1">4+ years · fintech &amp; iGaming</span></p>
-          <p class="run-line" style="--i:3"><span class="pass">✓</span> <span class="dim">platforms ›</span> web · iOS · Android</p>
-          <p class="run-line" style="--i:4"><span class="pass">✓</span> <span class="dim">migrations ›</span> <span data-i18n="run.t3">regression run time cut by 80%+</span></p>
-          <p class="run-line" style="--i:5"><span class="pass">✓</span> <span class="dim">ai ›</span> <span data-i18n="run.t4">test planning: 3–4 days → ~2 hours</span></p>
-          <p class="run-line" style="--i:6"><span class="pass">✓</span> <span class="dim">scale ›</span> <span data-i18n="run.t5">500+ page site migration validated</span></p>
+          <p class="run-line" style="--i:2"><span class="pass">✓</span> <span class="dim" data-i18n="run.l1">experience ›</span> <span data-i18n="run.t1">4+ years · fintech &amp; iGaming</span></p>
+          <p class="run-line" style="--i:3"><span class="pass">✓</span> <span class="dim" data-i18n="run.l2">platforms ›</span> web · iOS · Android</p>
+          <p class="run-line" style="--i:4"><span class="pass">✓</span> <span class="dim" data-i18n="run.l3">migrations ›</span> <span data-i18n="run.t3">regression run time cut by 80%+</span></p>
+          <p class="run-line" style="--i:5"><span class="pass">✓</span> <span class="dim" data-i18n="run.l4">ai ›</span> <span data-i18n="run.t4">test planning: 3–4 days → ~2 hours</span></p>
+          <p class="run-line" style="--i:6"><span class="pass">✓</span> <span class="dim" data-i18n="run.l5">scale ›</span> <span data-i18n="run.t5">500+ page site migration validated</span></p>
           <p class="run-line summary" style="--i:7"><span class="pass" data-i18n="run.summary">5 passed</span></p>
           <p class="run-line" style="--i:8"><span class="accent">$</span> <span class="cursor" aria-hidden="true"></span></p>
         </div>
@@ -113,7 +113,7 @@
 
     <!-- ABOUT -->
     <section class="section container" id="about" aria-labelledby="about-title">
-      <p class="eyebrow mono">// about</p>
+      <p class="eyebrow mono" data-i18n="about.eyebrow">// about</p>
       <h2 id="about-title" data-i18n="about.title">Quality that ships with the code.</h2>
       <div class="about-grid">
         <div class="prose">
@@ -147,7 +147,7 @@
 
     <!-- EXPERIENCE -->
     <section class="section container" id="experience" aria-labelledby="exp-title">
-      <p class="eyebrow mono">// git log --author=andre</p>
+      <p class="eyebrow mono" data-i18n="exp.eyebrow">// git log --author=andre</p>
       <h2 id="exp-title" data-i18n="exp.title">Experience</h2>
 
       <ol class="timeline">
@@ -167,7 +167,7 @@
               <li data-i18n="exp.k.b3">Replaced manual translation spot-checks with an <strong>automated localization regression suite</strong>.</li>
               <li data-i18n="exp.k.b4">Owned weekly full regression across <strong>iOS, Android and Web</strong> for the live-streaming sportsbook product for <strong>12+ months</strong>, and ran technical spikes that informed architecture decisions.</li>
             </ul>
-            <ul class="chips" aria-label="Tech">
+            <ul class="chips" aria-label="Tech" data-i18n-label="label.tech">
               <li>Playwright</li><li>C#</li><li>XCUITest</li><li>Espresso</li><li>Charles Proxy</li><li>Grafana</li>
             </ul>
           </div>
@@ -187,7 +187,7 @@
               <li data-i18n="exp.q.b4">Built AI workflows with MCP servers that generate full E2E suites <strong>in under 1 hour</strong>, plus a QA companion tool that cut test planning from <strong>3–4 days to ~2 hours</strong>.</li>
               <li data-i18n="exp.q.b5">Automated <strong>200+ functional tests</strong> and added AI-assisted code review before PRs, which reduced review back-and-forth.</li>
             </ul>
-            <ul class="chips" aria-label="Tech">
+            <ul class="chips" aria-label="Tech" data-i18n-label="label.tech">
               <li>Cypress</li><li>Playwright</li><li>TypeScript</li><li>SQL</li><li>Postman</li><li>BrowserStack</li>
             </ul>
           </div>
@@ -198,13 +198,13 @@
           <div class="commit-body">
             <div class="commit-head">
               <h3><span data-i18n="exp.t.role">Software QA Analyst</span> <span class="at">@ Tunts.Rocks | AOA Technology</span></h3>
-              <p class="when mono"><span data-i18n="exp.t.date">Jun 2020 – Jan 2023</span> · Curitiba, Brazil</p>
+              <p class="when mono"><span data-i18n="exp.t.date">Jun 2020 – Jan 2023</span> · <span data-i18n="exp.t.loc">Curitiba, Brazil</span></p>
             </div>
             <ul class="bullets">
               <li data-i18n="exp.t.b1">Owned test planning and edge-case coverage for product releases to catch defects before launch.</li>
               <li data-i18n="exp.t.b2">Improved functional testing workflows, which kept multiple platforms stable across release cycles.</li>
             </ul>
-            <ul class="chips" aria-label="Tech">
+            <ul class="chips" aria-label="Tech" data-i18n-label="label.tech">
               <li data-i18n="exp.t.chip">Functional testing</li><li>Jira</li><li>Postman</li><li>Agile</li>
             </ul>
           </div>
@@ -214,7 +214,7 @@
 
     <!-- WORK -->
     <section class="section container" id="work" aria-labelledby="work-title">
-      <p class="eyebrow mono">// selected work</p>
+      <p class="eyebrow mono" data-i18n="work.eyebrow">// selected work</p>
       <h2 id="work-title" data-i18n="work.title">Selected work</h2>
 
       <div class="work-grid">
@@ -296,29 +296,29 @@
 
     <!-- BUILT WITH AI -->
     <section class="section container" id="built-with-ai" aria-labelledby="ai-title">
-      <p class="eyebrow mono">// git log --oneline redesign</p>
+      <p class="eyebrow mono" data-i18n="ai.eyebrow">// git log --oneline redesign</p>
       <h2 id="ai-title" data-i18n="ai.title">How this site was built</h2>
       <p class="lede ai-lede" data-i18n="ai.lede">This page is itself an example of the AI-assisted workflow I use at work. I built it in one session with <strong>Claude Code</strong>: I set direction, made the content and design calls and reviewed every change. The AI researched, implemented and tested in a real browser.</p>
 
       <div class="ai-grid">
         <ol class="ai-steps">
           <li>
-            <p class="mono accent">01 · audit</p>
+            <p class="mono accent" data-i18n="ai.s1.k">01 · audit</p>
             <h3 data-i18n="ai.s1.t">Check the facts first</h3>
             <p data-i18n="ai.s1.d">Compared the old site with my resume and LinkedIn. It overstated experience, missed a current employer and showed numbers I couldn't back up. New rule: every claim must trace back to the resume, and no number gets invented.</p>
           </li>
           <li>
-            <p class="mono accent">02 · plan</p>
+            <p class="mono accent" data-i18n="ai.s2.k">02 · plan</p>
             <h3 data-i18n="ai.s2.t">Choose for the reader</h3>
             <p data-i18n="ai.s2.d">Reviewed a terminal-style reference site and kept its look, but chose a normal scrolling layout over an interactive shell, because recruiters skim in under a minute. Removed unused Jekyll and CI files and added a plain static deploy.</p>
           </li>
           <li>
-            <p class="mono accent">03 · iterate</p>
+            <p class="mono accent" data-i18n="ai.s3.k">03 · iterate</p>
             <h3 data-i18n="ai.s3.t">Fix what review finds</h3>
             <p data-i18n="ai.s3.d">My review drove each round: internal project jargon became plain-language results, and a mobile menu that stayed open over the content became an always-visible tab bar with 44px tap targets and a header that hides while you read.</p>
           </li>
           <li>
-            <p class="mono accent">04 · verify</p>
+            <p class="mono accent" data-i18n="ai.s4.k">04 · verify</p>
             <h3 data-i18n="ai.s4.t">Test before shipping</h3>
             <p data-i18n="ai.s4.d">Every change was checked in a real browser at phone, tablet and desktop sizes before it was committed, in small commits that can each be reviewed on their own. The checks are in the QA report.</p>
           </li>
@@ -358,7 +358,7 @@
 
     <!-- STACK -->
     <section class="section container" id="stack" aria-labelledby="stack-title">
-      <p class="eyebrow mono">// cat stack.json</p>
+      <p class="eyebrow mono" data-i18n="stack.eyebrow">// cat stack.json</p>
       <h2 id="stack-title" data-i18n="stack.title">Tools I work with</h2>
       <div class="stack-grid">
         <div class="stack-group">
@@ -394,7 +394,7 @@
 
     <!-- EDUCATION -->
     <section class="section container" id="education" aria-labelledby="edu-title">
-      <p class="eyebrow mono">// background</p>
+      <p class="eyebrow mono" data-i18n="edu.eyebrow">// background</p>
       <h2 id="edu-title" data-i18n="edu.title">Education &amp; recognition</h2>
       <div class="edu-grid">
         <div class="card">
@@ -422,7 +422,7 @@
 
     <!-- CONTACT -->
     <section class="section container contact" id="contact" aria-labelledby="contact-title">
-      <p class="eyebrow mono">// ./contact --now</p>
+      <p class="eyebrow mono" data-i18n="contact.eyebrow">// ./contact --now</p>
       <h2 id="contact-title" data-i18n="contact.title">Let's talk about quality.</h2>
       <p class="lede" data-i18n="contact.text">Hiring a Sr. QA Engineer or SDET to own automation across web, mobile and APIs, or someone keen to test AI-powered products? I'd like to hear from you.</p>
       <div class="cta-row">
