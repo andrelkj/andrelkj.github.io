@@ -71,3 +71,32 @@ export async function findBrokenAnchors(page: Page): Promise<string[]> {
       .map((href) => `${href}: no element with this id`),
   );
 }
+
+/** An icon declared in <head> with `<link rel="icon">` (any rel containing "icon"). */
+export interface DeclaredIcon {
+  /** Absolute URL. */
+  readonly url: string;
+  /** The declared `type` attribute, e.g. "image/svg+xml", or null when absent. */
+  readonly type: string | null;
+}
+
+/** Reads every icon the page declares, so new icons are covered without editing tests. */
+export async function collectIcons(page: Page): Promise<DeclaredIcon[]> {
+  return page.evaluate(() =>
+    [...document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]')].map((link) => ({
+      url: link.href,
+      type: link.getAttribute('type'),
+    })),
+  );
+}
+
+/**
+ * Returns the root element name of an SVG document ("svg" when valid), or "parsererror"
+ * when the text isn't well-formed SVG/XML. Parsed in the browser with DOMParser.
+ */
+export async function svgRootName(page: Page, svgText: string): Promise<string> {
+  return page.evaluate((text) => {
+    const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+    return doc.querySelector('parsererror') ? 'parsererror' : doc.documentElement.nodeName;
+  }, svgText);
+}

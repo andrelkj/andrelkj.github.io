@@ -105,6 +105,11 @@ export class PortfolioPage {
     );
   }
 
+  /** Every link on the page whose href is exactly `href`. */
+  linksTo(href: string): Locator {
+    return this.page.locator(`a[href="${href}"]`);
+  }
+
   /** A content section by id. */
   section(id: Section): Locator {
     return this.page.locator(`section#${id}`);
