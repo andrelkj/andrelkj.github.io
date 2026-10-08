@@ -1,0 +1,62 @@
+name: Mutation
+
+# Proves the suite catches real defects: applies every mutant in scripts/mutate/mutants.ts to a
+# copy of the site and checks the intended tests fail. Writes docs/TRUST.md as an artifact for a
+# person to review and commit; CI never commits it.
+# Weekly and manual only: a full run takes ~23 min. Pull requests are still protected by the
+# fast catalog check in the normal suite (tests/self-test/mutation.spec.ts), which fails if a
+# change makes any mutant stale.
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      only:
+        description: Run only these mutants, comma-separated (e.g. M-I18N-01,M-NAV-02). Empty = all
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mutation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mutate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      # Same image as tests.yml: the visual mutants need the Linux baselines.
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: npm ci
+
+      # git in the container refuses a checkout owned by another user; the runner needs the SHA.
+      - name: Trust the workspace for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Run all mutants
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          ONLY: ${{ inputs.only || '' }}
+        # A partial run doesn't write TRUST.md: the scorecard always covers the whole catalog.
+        run: |
+          if [ -n "$ONLY" ]; then
+            npm run mutate -- --only "$ONLY"
+          else
+            npm run mutate -- --write
+          fi
+
+      - name: Upload trust scorecard
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: trust-scorecard
+          path: docs/TRUST.md
+          if-no-files-found: ignore
+          retention-days: 30

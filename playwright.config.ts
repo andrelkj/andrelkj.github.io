@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const isCI = Boolean(process.env.CI);
-const LOCAL_PORT = 4173;
+/** PORT and SITE_DIR let the mutation runner serve a mutated copy of the site on its own port. */
+const LOCAL_PORT = Number(process.env.PORT ?? 4173);
+const SITE_DIR = process.env.SITE_DIR ?? '.';
 
 /**
  * Tests run against a local static server by default. Set BASE_URL to run the same
@@ -44,7 +46,7 @@ export default defineConfig({
   ...(useLocalServer
     ? {
         webServer: {
-          command: `npx http-server . -p ${LOCAL_PORT} -s -c-1`,
+          command: `npx http-server "${SITE_DIR}" -p ${String(LOCAL_PORT)} -s -c-1`,
           url: baseURL,
           reuseExistingServer: !isCI,
         },
