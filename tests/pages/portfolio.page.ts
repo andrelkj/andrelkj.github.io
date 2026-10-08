@@ -1,6 +1,9 @@
 import type { Locator, Page } from '@playwright/test';
 import type { Lang } from '../support/types';
 
+/** At this width and below the nav becomes a tab bar and the header hides on scroll (styles.css). */
+export const COMPACT_MAX_WIDTH = 820;
+
 /** Sections linked from the primary nav, in page order. */
 export const NAV_SECTIONS = ['about', 'experience', 'work', 'stack', 'contact'] as const;
 export type NavSection = (typeof NAV_SECTIONS)[number];
@@ -105,6 +108,13 @@ export class PortfolioPage {
   /** A content section by id. */
   section(id: Section): Locator {
     return this.page.locator(`section#${id}`);
+  }
+
+  /** Scrolls the window to `y` instantly (the page uses smooth scrolling by default). */
+  async scrollTo(y: number): Promise<void> {
+    await this.page.evaluate((top) => {
+      window.scrollTo({ top, behavior: 'instant' });
+    }, y);
   }
 
   async switchLanguage(lang: Lang): Promise<void> {
