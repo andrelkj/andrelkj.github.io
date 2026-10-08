@@ -27,8 +27,9 @@ test.describe('visual', { tag: '@visual' }, () => {
         await expect(page).toHaveScreenshot(`first-screen-${theme}.png`);
       });
 
-      test('full page', { annotation: req('REQ-VIS-01') }, async ({ page }) => {
-        await expect(page).toHaveScreenshot(`full-page-${theme}.png`, { fullPage: true });
+      test('full page', { annotation: req('REQ-VIS-01') }, async ({ page, portfolio }) => {
+        const clip = await portfolio.fullPageClip();
+        await expect(page).toHaveScreenshot(`full-page-${theme}.png`, { fullPage: true, clip });
       });
     });
   }

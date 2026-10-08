@@ -128,6 +128,20 @@ export class PortfolioPage {
     });
   }
 
+  /**
+   * Clip for a full-page screenshot, rounded down to whole pixels. The page is 6948.23px tall;
+   * Chromium's full-page capture rounds that fractional height inconsistently (6948 vs 6949
+   * between consecutive shots), so the screenshot never stabilizes without a fixed clip.
+   */
+  async fullPageClip(): Promise<{ x: number; y: number; width: number; height: number }> {
+    return this.page.evaluate(() => ({
+      x: 0,
+      y: 0,
+      width: document.documentElement.clientWidth,
+      height: Math.floor(document.body.getBoundingClientRect().height),
+    }));
+  }
+
   /** A content section by id. */
   section(id: Section): Locator {
     return this.page.locator(`section#${id}`);
