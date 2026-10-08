@@ -1,11 +1,11 @@
-import { expect, test } from '../fixtures/test';
+import { expect, req, test } from '../fixtures/test';
 
 test.describe('page health', () => {
   test(
     'home page loads with its title and main landmark',
     {
       tag: '@smoke',
-      annotation: { type: 'req', description: 'REQ-HEALTH-01' },
+      annotation: req('REQ-HEALTH-01'),
     },
     async ({ page, portfolio }) => {
       await portfolio.goto();
