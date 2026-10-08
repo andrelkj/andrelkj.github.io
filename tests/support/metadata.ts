@@ -32,3 +32,14 @@ export async function readMetadata(page: Page): Promise<PageMetadata> {
     };
   });
 }
+
+/** All `sameAs` URLs declared across the page's valid JSON-LD blocks. */
+export function sameAsUrls(meta: PageMetadata): string[] {
+  return meta.jsonLd.flatMap((block) => {
+    if (!block.ok || typeof block.value !== 'object' || block.value === null) return [];
+    const sameAs: unknown = (block.value as Record<string, unknown>).sameAs;
+    return Array.isArray(sameAs)
+      ? sameAs.filter((url): url is string => typeof url === 'string')
+      : [];
+  });
+}
