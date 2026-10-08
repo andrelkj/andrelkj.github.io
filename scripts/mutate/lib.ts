@@ -171,6 +171,11 @@ export function renderTrust(results: readonly MutantResult[], context: TrustCont
   return lines.join('\n');
 }
 
+/** Escapes table pipes and HTML (a description like "end of <body>" would render as a tag). */
 function escapeCell(text: string): string {
-  return text.replace(/(?<!\\)\|/g, '\\|');
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/(?<!\\)\|/g, '\\|');
 }

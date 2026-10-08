@@ -187,10 +187,14 @@ for (const mutant of selected) {
 }
 
 if (write) {
-  const commit = execFileSync('git', ['rev-parse', '--short', 'HEAD'], {
-    cwd: ROOT,
-    encoding: 'utf8',
-  }).trim();
+  // On a pull_request run HEAD is GitHub's temporary merge commit; the workflow passes the
+  // branch commit in COMMIT_SHA instead.
+  const commit = (
+    process.env.COMMIT_SHA ??
+    execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' })
+  )
+    .trim()
+    .slice(0, 7);
   const environment = process.env.CI
     ? `${process.platform} (Playwright container, CI)`
     : process.platform;

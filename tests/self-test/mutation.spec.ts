@@ -117,6 +117,23 @@ test.describe('renderTrust', () => {
     expect(markdown).toContain('| M-2 | defect \\| with pipe | REQ-I18N-01 | ❌ survived | — |');
     expect(markdown).toContain('30 of 31 requirements proven by 53 tests');
   });
+
+  test('escapes HTML in cells so descriptions render as text', () => {
+    const markdown = renderTrust(
+      [
+        {
+          id: 'M-1',
+          description: 'theme applied at the end of <body>',
+          area: 'Theme',
+          expectedReqs: ['REQ-THEME-03'],
+          status: 'caught',
+          details: [],
+        },
+      ],
+      { environment: 'linux', commit: 'abc1234', coverage: { covered: 1, total: 1, tests: 1 } },
+    );
+    expect(markdown).toContain('theme applied at the end of &lt;body&gt;');
+  });
 });
 
 test.describe('mutant catalog', () => {

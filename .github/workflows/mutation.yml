@@ -42,6 +42,8 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Run all mutants
+        env:
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: npm run mutate -- --write
 
       - name: Upload trust scorecard
