@@ -28,8 +28,8 @@ test.describe('visual', { tag: '@visual' }, () => {
       });
 
       test('full page', { annotation: req('REQ-VIS-01') }, async ({ page, portfolio }) => {
-        const clip = await portfolio.fullPageClip();
-        await expect(page).toHaveScreenshot(`full-page-${theme}.png`, { fullPage: true, clip });
+        await portfolio.expandViewportToFullPage();
+        await expect(page).toHaveScreenshot(`full-page-${theme}.png`);
       });
     });
   }

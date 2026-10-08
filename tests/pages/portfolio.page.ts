@@ -129,17 +129,19 @@ export class PortfolioPage {
   }
 
   /**
-   * Clip for a full-page screenshot, rounded down to whole pixels. The page is 6948.23px tall;
-   * Chromium's full-page capture rounds that fractional height inconsistently (6948 vs 6949
-   * between consecutive shots), so the screenshot never stabilizes without a fixed clip.
+   * Resizes the viewport to the page's full height (rounded up to whole pixels) so the whole page
+   * can be captured as a plain viewport screenshot. Playwright's `fullPage` capture isn't used:
+   * the page is 6948.23px tall on desktop, and Chromium rounds that fractional height
+   * inconsistently between consecutive shots (6948 vs 6949), even with a `clip`.
    */
-  async fullPageClip(): Promise<{ x: number; y: number; width: number; height: number }> {
-    return this.page.evaluate(() => ({
-      x: 0,
-      y: 0,
-      width: document.documentElement.clientWidth,
-      height: Math.floor(document.body.getBoundingClientRect().height),
+  async expandViewportToFullPage(): Promise<void> {
+    const size = await this.page.evaluate(() => ({
+      width: window.innerWidth,
+      height: Math.ceil(document.body.getBoundingClientRect().height),
     }));
+    await this.page.setViewportSize(size);
+    // One frame for the site's resize handlers (active nav, header) to settle.
+    await this.page.evaluate(() => new Promise((resolve) => requestAnimationFrame(resolve)));
   }
 
   /** A content section by id. */
