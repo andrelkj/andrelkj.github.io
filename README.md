@@ -77,6 +77,8 @@ tests/self-test/                             tests for the helpers, the locator 
 scripts/coverage/                            coverage matrix generator and rules
 scripts/mutate/                              mutant catalog and mutation runner
 .github/workflows/                           tests on every PR, Pages deploy
+.claude/skills/                              AI workflow skills (plan, write, review, heal, a11y, trust)
+CLAUDE.md                                    rules and commands for AI sessions in this repo
 ```
 
 ## Writing a test
@@ -107,6 +109,21 @@ To update baselines after an intentional design change:
 
 CI never commits baselines by itself. `VISUAL_LOCAL=1 npm test` runs the visual tests locally against git-ignored, machine-specific baselines, for experiments only.
 
+## AI-assisted workflow
+
+The suite is built and maintained with Claude Code. The way of working is captured as project skills in `.claude/skills/`, so every future session (or person) follows the same process:
+
+| Skill           | What it does                                                                                                                                                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `qa-plan`       | Turns a site change or idea into visitor-observable requirements and a test plan where every test names the defect that must make it fail.                                                                                |
+| `pw-write-test` | Writes tests with this repo's fixtures, page object and locator policy, then proves each one can fail with a catalog mutant. Its `references/conventions.md` is the single conventions guide.                             |
+| `pw-review`     | Reviews a diff by severity, starting with "could this make a green run lie?", against Playwright best practices, strict TypeScript and MDN async guidance. Gates run before opinions.                                     |
+| `pw-heal`       | Triages a failing test (product bug, locator drift, test bug, flake, environment). Healing may change **how** an element is found, never **what** is expected; fixes are proposed with evidence and approved by a person. |
+| `a11y-triage`   | Maps axe violations to WCAG criteria and root causes, with an exact contrast calculator for the theme tokens. Exceptions are scoped, owned and expiring.                                                                  |
+| `trust-audit`   | Runs coverage, mutation, flake and self-test checks and turns every gap into a next step; refreshes `docs/TRUST.md`.                                                                                                      |
+
+`CLAUDE.md` holds the rules every session follows, and `.mcp.json` registers Playwright's test MCP server for page snapshots and locator generation. Playwright's stock agents are intentionally not installed: the stock healer edits expected values and marks tests `fixme` without asking.
+
 ## CI and deploy
 
 - **Every PR** runs `.github/workflows/tests.yml` inside the pinned Playwright container: typecheck, lint, format check and the full suite. The HTML report is uploaded as an artifact.
@@ -124,8 +141,6 @@ The suite is developed in phases, one pull request per phase, in small commits. 
 | 3. Requirements and specs                                                                                | ✅ Done      |
 | 4. Visual baselines (screenshots per device × theme)                                                     | ✅ Done      |
 | 5. Coverage matrix: CI fails if a requirement has no test, or a test has no requirement                  | ✅ Done      |
-| 6. Automated mutation runner and `docs/TRUST.md` scorecard                                               | 🔄 In review |
-| 7. Claude Code skills (`qa-plan`, `pw-write-test`, `pw-review`, `pw-heal`, `a11y-triage`, `trust-audit`) | Planned      |
+| 6. Automated mutation runner and `docs/TRUST.md` scorecard                                               | ✅ Done      |
+| 7. Claude Code skills (`qa-plan`, `pw-write-test`, `pw-review`, `pw-heal`, `a11y-triage`, `trust-audit`) | 🔄 In review |
 | 8. Deploy gated on tests, post-deploy smoke, nightly external link check                                 | Planned      |
-
-Planned skills follow one rule for self-healing: a fix may change **how** an element is found, never **what** is expected. Locator fixes are proposed with evidence and approved by a human, never applied silently at runtime.
