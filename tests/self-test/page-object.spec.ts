@@ -29,6 +29,7 @@ for (const lang of LANGS) {
         heading: portfolio.heading,
         skipLink: portfolio.skipLink,
         footer: portfolio.footer,
+        footerYear: portfolio.footerYear,
         ...Object.fromEntries(NAV_SECTIONS.map((s) => [`navLink(${s})`, topBar.navLink(s)])),
         ...Object.fromEntries(SECTIONS.map((s) => [`section(${s})`, portfolio.section(s)])),
       };

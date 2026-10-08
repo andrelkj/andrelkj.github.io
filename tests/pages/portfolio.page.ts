@@ -33,11 +33,14 @@ export class TopBar {
   readonly themeToggle: Locator;
   /** The section links of the primary nav, in order (the brand link is not included). */
   readonly navLinks: Locator;
+  /** The nav link(s) currently marked `aria-current` (should always be at most one). */
+  readonly currentNavLink: Locator;
 
   constructor(page: Page) {
     this.root = page.getByRole('banner');
     this.nav = this.root.getByRole('navigation', { name: 'Primary' });
     this.navLinks = this.nav.getByRole('list').getByRole('link');
+    this.currentNavLink = this.nav.locator('a[aria-current="true"]');
     this.languageSwitch = this.root.getByRole('group', { name: /^(Language|Idioma)$/ });
     this.themeToggle = this.root.getByRole('button', { name: /theme|tema/i });
   }
@@ -70,6 +73,7 @@ export class PortfolioPage {
   readonly sectionHeadings: Locator;
   readonly skipLink: Locator;
   readonly footer: Locator;
+  readonly footerYear: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -80,6 +84,7 @@ export class PortfolioPage {
     this.sectionHeadings = this.main.getByRole('heading', { level: 2 });
     this.skipLink = page.locator('a.skip-link');
     this.footer = page.getByRole('contentinfo');
+    this.footerYear = this.footer.locator('#year');
   }
 
   /** Opens the page and waits for script.js to finish its first language pass. */
@@ -120,6 +125,20 @@ export class PortfolioPage {
     await this.page.evaluate((top) => {
       window.scrollTo({ top, behavior: 'instant' });
     }, y);
+  }
+
+  /** Scrolls a section to the top, as following its link would (respects scroll-padding). */
+  async scrollToSection(id: Section): Promise<void> {
+    await this.section(id).evaluate((el) => {
+      el.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
+  }
+
+  /** Scrolls to the very bottom of the page. */
+  async scrollToBottom(): Promise<void> {
+    await this.page.evaluate(() => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
+    });
   }
 
   async switchLanguage(lang: Lang): Promise<void> {
