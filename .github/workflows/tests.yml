@@ -4,6 +4,15 @@ on:
   pull_request:
   workflow_call:
   workflow_dispatch:
+    inputs:
+      update_snapshots:
+        description: Regenerate visual baselines (uploaded as the visual-baselines artifact, not committed)
+        type: boolean
+        default: false
+      repeat_each:
+        description: Run every test this many times (flake check in the CI container)
+        type: number
+        default: 1
 
 permissions:
   contents: read
@@ -40,7 +49,10 @@ jobs:
         run: npm run check
 
       - name: Run Playwright tests
-        run: npx playwright test
+        env:
+          REPEAT_EACH: ${{ inputs.repeat_each || 1 }}
+          UPDATE_FLAG: ${{ inputs.update_snapshots && '--update-snapshots' || '' }}
+        run: npx playwright test --repeat-each="$REPEAT_EACH" $UPDATE_FLAG
 
       - name: Upload HTML report
         if: ${{ !cancelled() }}
@@ -48,4 +60,15 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 14
+
+      # New or regenerated visual baselines (Linux, this container). Download, review the images,
+      # then commit them: baselines are never committed by CI itself.
+      - name: Upload visual baselines
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-baselines
+          path: tests/specs/visual.spec.ts-snapshots/*-linux.png
+          if-no-files-found: ignore
           retention-days: 14
