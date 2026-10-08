@@ -3,19 +3,18 @@ name: Mutation
 # Proves the suite catches real defects: applies every mutant in scripts/mutate/mutants.ts to a
 # copy of the site and checks the intended tests fail. Writes docs/TRUST.md as an artifact for a
 # person to review and commit; CI never commits it.
+# Weekly and manual only: a full run takes ~23 min. Pull requests are still protected by the
+# fast catalog check in the normal suite (tests/self-test/mutation.spec.ts), which fails if a
+# change makes any mutant stale.
 on:
-  pull_request:
-    paths:
-      - index.html
-      - styles.css
-      - script.js
-      - assets/**
-      - tests/**
-      - scripts/mutate/**
-      - playwright.config.ts
   schedule:
     - cron: '0 6 * * 1' # Mondays 06:00 UTC
   workflow_dispatch:
+    inputs:
+      only:
+        description: Run only these mutants, comma-separated (e.g. M-I18N-01,M-NAV-02). Empty = all
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -43,8 +42,15 @@ jobs:
 
       - name: Run all mutants
         env:
-          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: npm run mutate -- --write
+          COMMIT_SHA: ${{ github.sha }}
+          ONLY: ${{ inputs.only || '' }}
+        # A partial run doesn't write TRUST.md: the scorecard always covers the whole catalog.
+        run: |
+          if [ -n "$ONLY" ]; then
+            npm run mutate -- --only "$ONLY"
+          else
+            npm run mutate -- --write
+          fi
 
       - name: Upload trust scorecard
         if: ${{ !cancelled() }}
