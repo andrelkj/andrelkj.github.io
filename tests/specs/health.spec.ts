@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../fixtures/test';
 
 test.describe('page health', () => {
   test(
@@ -7,12 +7,12 @@ test.describe('page health', () => {
       tag: '@smoke',
       annotation: { type: 'req', description: 'REQ-HEALTH-01' },
     },
-    async ({ page }) => {
-      await page.goto('/');
+    async ({ page, portfolio }) => {
+      await portfolio.goto();
 
       await expect(page).toHaveTitle('André Kreutzer — Sr. QA Engineer / SDET');
-      await expect(page.getByRole('main')).toBeVisible();
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(/André Kreutzer/);
+      await expect(portfolio.main).toBeVisible();
+      await expect(portfolio.heading).toHaveText(/André Kreutzer/);
     },
   );
 });

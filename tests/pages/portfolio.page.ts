@@ -1,0 +1,91 @@
+import type { Locator, Page } from '@playwright/test';
+import type { Lang } from '../support/types';
+
+/** Sections linked from the primary nav, in page order. */
+export const NAV_SECTIONS = ['about', 'experience', 'work', 'stack', 'contact'] as const;
+export type NavSection = (typeof NAV_SECTIONS)[number];
+
+/** Every content section with an id, in page order (hero excluded). */
+export const SECTIONS = [
+  'about',
+  'experience',
+  'work',
+  'built-with-ai',
+  'stack',
+  'education',
+  'contact',
+] as const;
+export type Section = (typeof SECTIONS)[number];
+
+/**
+ * The sticky header: brand, primary nav, language switch and theme toggle.
+ *
+ * Locators are language-independent on purpose, so the same page object works in EN and PT:
+ * nav links are found by their target (`href`), the toggle by an EN|PT name pattern.
+ */
+export class TopBar {
+  readonly root: Locator;
+  readonly nav: Locator;
+  readonly languageSwitch: Locator;
+  readonly themeToggle: Locator;
+
+  constructor(page: Page) {
+    this.root = page.getByRole('banner');
+    this.nav = this.root.getByRole('navigation', { name: 'Primary' });
+    this.languageSwitch = this.root.getByRole('group', { name: /^(Language|Idioma)$/ });
+    this.themeToggle = this.root.getByRole('button', { name: /theme|tema/i });
+  }
+
+  /** Nav link that points at a section, whatever language it is displayed in. */
+  navLink(section: NavSection): Locator {
+    return this.nav.locator(`a[href="#${section}"]`);
+  }
+
+  /** The EN or PT button of the language switch. */
+  languageButton(lang: Lang): Locator {
+    return this.languageSwitch.getByRole('button', { name: lang.toUpperCase(), exact: true });
+  }
+}
+
+/** The portfolio is a single page; this object is the only place that knows its structure. */
+export class PortfolioPage {
+  readonly page: Page;
+  readonly topBar: TopBar;
+  /** `<html>`: carries `data-theme` and `lang`. */
+  readonly html: Locator;
+  readonly main: Locator;
+  readonly heading: Locator;
+  readonly skipLink: Locator;
+  readonly footer: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.topBar = new TopBar(page);
+    this.html = page.locator('html');
+    this.main = page.getByRole('main');
+    this.heading = page.getByRole('heading', { level: 1 });
+    this.skipLink = page.locator('a.skip-link');
+    this.footer = page.getByRole('contentinfo');
+  }
+
+  /** Opens the page and waits for script.js to finish its first language pass. */
+  async goto(): Promise<void> {
+    await this.page.goto('/');
+    // script.js sets aria-pressed on the language buttons during init; once one is pressed,
+    // translations and labels have been applied.
+    await this.topBar.languageSwitch.locator('[aria-pressed="true"]').waitFor();
+  }
+
+  /** A content section by id. */
+  section(id: Section): Locator {
+    return this.page.locator(`section#${id}`);
+  }
+
+  async switchLanguage(lang: Lang): Promise<void> {
+    await this.topBar.languageButton(lang).click();
+  }
+
+  async toggleTheme(): Promise<void> {
+    await this.topBar.themeToggle.click();
+  }
+}
