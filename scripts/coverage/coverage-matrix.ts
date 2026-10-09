@@ -28,6 +28,8 @@ const listing = execFileSync('npx', ['playwright', 'test', '--list', '--reporter
   cwd: ROOT,
   encoding: 'utf8',
   maxBuffer: 64 * 1024 * 1024,
+  // Include the nightly @external tests in the listing: they prove requirements too.
+  env: { ...process.env, RUN_EXTERNAL: '1' },
 });
 const requirements = parseRequirements(readFileSync(REQUIREMENTS, 'utf8'));
 const tests = collectTests(JSON.parse(listing) as JsonReport, EXCLUDED_PROJECTS);

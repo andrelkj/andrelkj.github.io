@@ -401,6 +401,19 @@ export const MUTANTS: readonly Mutant[] = [
     grep: '@links',
   },
 
+  {
+    id: 'M-LINK-10',
+    description: 'A course project link points to a repository that does not exist',
+    file: 'index.html',
+    mutate: replaceOnce(
+      'href="https://github.com/andrelkj/ZombiePlus" target="_blank"',
+      'href="https://github.com/andrelkj/ZombiePlus-archived" target="_blank"',
+    ),
+    // Real network: this mutant only runs the nightly @external check.
+    expectedReqs: ['REQ-LINK-06'],
+    grep: '@external',
+  },
+
   // ---------- Navigation ----------
   {
     id: 'M-NAV-01',
