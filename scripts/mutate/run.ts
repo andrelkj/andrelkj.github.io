@@ -90,7 +90,8 @@ function runTests(siteDir: string, grep: string, projects: readonly Project[]) {
       cwd: ROOT,
       encoding: 'utf8',
       maxBuffer: 256 * 1024 * 1024,
-      env: { ...process.env, SITE_DIR: siteDir, PORT: String(nextPort++) },
+      // RUN_EXTERNAL lets mutants that target @external (real network) run their tests.
+      env: { ...process.env, SITE_DIR: siteDir, PORT: String(nextPort++), RUN_EXTERNAL: '1' },
     },
   );
   try {
@@ -158,6 +159,7 @@ function coverageSummary() {
     cwd: ROOT,
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
+    env: { ...process.env, RUN_EXTERNAL: '1' },
   });
   const requirements = parseRequirements(
     readFileSync(join(ROOT, 'docs', 'REQUIREMENTS.md'), 'utf8'),

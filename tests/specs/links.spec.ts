@@ -69,7 +69,12 @@ test.describe('links and assets', { tag: '@links' }, () => {
 
       for (const url of new Set(EXTERNAL_LINKS)) {
         await test.step(url, async () => {
-          for (const link of await portfolio.linksTo(url).all()) {
+          const links = portfolio.linksTo(url);
+          // Count first: a loop over zero links would pass without clicking anything.
+          await expect(links).toHaveCount(
+            EXTERNAL_LINKS.filter((expected) => expected === url).length,
+          );
+          for (const link of await links.all()) {
             const popupOpened = page.waitForEvent('popup');
             await link.click();
             const popup = await popupOpened;
@@ -100,7 +105,9 @@ test.describe('links and assets', { tag: '@links' }, () => {
       }
 
       await test.step('clicking each one saves the file under its own name', async () => {
-        for (const link of await portfolio.linksTo(resumeLinks[0]?.href ?? '').all()) {
+        const links = portfolio.linksTo(resumeLinks[0]?.href ?? '');
+        await expect(links, 'every resume link shares one href').toHaveCount(resumeLinks.length);
+        for (const link of await links.all()) {
           const downloadStarted = page.waitForEvent('download');
           await link.click();
           expect((await downloadStarted).suggestedFilename()).toBe(RESUME_FILE);

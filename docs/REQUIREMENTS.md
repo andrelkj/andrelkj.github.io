@@ -54,14 +54,14 @@ Which tests prove each requirement is generated into [`COVERAGE.md`](COVERAGE.md
 
 ## Links and assets
 
-| ID          | Requirement                                                                                                                                            |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| REQ-LINK-01 | Every in-page link (`#id`) points at an existing section. Following a nav link brings that section into view and marks the link as current.            |
-| REQ-LINK-02 | External links go to the expected destinations (`tests/data/links.ts`), open in a new tab, and use `rel="noopener"`. No external link uses plain http. |
-| REQ-LINK-03 | Every resume link downloads a real PDF (HTTP 200, `application/pdf`, starts with `%PDF`).                                                              |
-| REQ-LINK-04 | Every icon declared with `<link rel="icon">` loads (HTTP 200) with the content type it declares. An SVG icon must be a valid `<svg>` document.         |
-| REQ-LINK-05 | The contact email link and the email in the JSON-LD data are the same address.                                                                         |
-| REQ-LINK-06 | External destinations are actually reachable (nightly, real network). _Planned: phase 8._                                                              |
+| ID          | Requirement                                                                                                                                                                                                             |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| REQ-LINK-01 | Every in-page link (`#id`) points at an existing section. Following a nav link brings that section into view and marks the link as current.                                                                             |
+| REQ-LINK-02 | External links go to the expected destinations (`tests/data/links.ts`), open in a new tab, and use `rel="noopener"`. No external link uses plain http.                                                                  |
+| REQ-LINK-03 | Every resume link downloads a real PDF (HTTP 200, `application/pdf`, starts with `%PDF`).                                                                                                                               |
+| REQ-LINK-04 | Every icon declared with `<link rel="icon">` loads (HTTP 200) with the content type it declares. An SVG icon must be a valid `<svg>` document.                                                                          |
+| REQ-LINK-05 | The contact email link and the email in the JSON-LD data are the same address.                                                                                                                                          |
+| REQ-LINK-06 | Every external link on the page answers without an error on the real network (checked nightly). Hosts that block automated clients are listed with a reason in `tests/data/links.ts` and only checked for reachability. |
 
 ## Navigation
 

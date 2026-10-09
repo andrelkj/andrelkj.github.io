@@ -35,11 +35,13 @@ export async function findHorizontalOverflow(page: Page): Promise<string[]> {
       (el.id ? `#${el.id}` : '') +
       [...el.classList].map((c) => `.${c}`).join('');
 
+    let offenders = 0;
     for (const el of document.body.querySelectorAll('*')) {
-      if (problems.length > 10) break;
+      if (offenders === 10) break;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.right <= viewport + 1 || insideHorizontalClip(el)) continue;
       problems.push(`${label(el)} ends at ${String(Math.round(rect.right))}px`);
+      offenders++;
     }
     return problems;
   });

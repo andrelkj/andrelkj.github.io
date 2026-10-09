@@ -1,5 +1,5 @@
 import { expect, req, test } from '../fixtures/test';
-import { COMPACT_MAX_WIDTH } from '../pages/portfolio.page';
+import { COMPACT_MAX_WIDTH, NAV_SECTIONS } from '../pages/portfolio.page';
 import { findHorizontalOverflow } from '../support/layout';
 import { LANGS } from '../support/types';
 
@@ -29,6 +29,8 @@ test.describe('responsive layout', { tag: '@responsive' }, () => {
         async ({ portfolio }) => {
           await portfolio.goto();
 
+          // Count first: a loop over zero links would pass without checking anything.
+          await expect(portfolio.topBar.navLinks).toHaveCount(NAV_SECTIONS.length);
           for (const link of await portfolio.topBar.navLinks.all()) {
             await expect(link).toBeInViewport({ ratio: 1 });
           }

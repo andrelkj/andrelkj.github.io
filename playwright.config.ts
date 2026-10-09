@@ -14,6 +14,8 @@ const useLocalServer = process.env.BASE_URL === undefined;
 
 export default defineConfig({
   testDir: './tests',
+  // @external tests hit real third-party sites; they run nightly (RUN_EXTERNAL=1), not on every PR.
+  ...(process.env.RUN_EXTERNAL ? {} : { grepInvert: /@external/ }),
   fullyParallel: true,
   forbidOnly: isCI,
   // One retry in CI surfaces flakiness in the report; failOnFlakyTests still fails the run.

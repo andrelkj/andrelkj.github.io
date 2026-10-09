@@ -1,0 +1,44 @@
+name: Nightly
+
+# Checks that depend on the outside world, kept out of PRs and deploys so they stay deterministic:
+# - the page's external links still lead somewhere (REQ-LINK-06, real network);
+# - the live site still passes its smoke tests (catches Pages, DNS or certificate problems on
+#   days without a deploy).
+on:
+  schedule:
+    - cron: '0 5 * * *' # daily 05:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: External links answer (real network)
+        env:
+          RUN_EXTERNAL: '1'
+        run: npx playwright test --grep @external --project=desktop
+
+      - name: Live site smoke tests
+        if: ${{ !cancelled() }}
+        env:
+          BASE_URL: https://andrelkj.github.io/
+        run: npx playwright test --grep @smoke --project=desktop
+
+      - name: Upload report on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-report
+          path: playwright-report/
+          retention-days: 14

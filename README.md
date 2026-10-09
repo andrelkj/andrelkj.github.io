@@ -14,7 +14,7 @@ Generated tests are only useful if you can tell they would actually fail when th
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Requirements first**            | [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) states in plain language what is validated (31 IDs) and maps each claim in the site's "Checks run on this site" panel to them. Every test is tagged with the IDs it proves.                                                                                                                          |
 | **Enforced traceability**         | [`docs/COVERAGE.md`](docs/COVERAGE.md) is generated from the annotations and links every requirement to the exact test lines that prove it. CI fails if a requirement has no test, a test proves no requirement, an ID doesn't exist, or the matrix is out of date.                                                                                 |
-| **Deliberate breakage (mutants)** | `npm run mutate` applies 43 realistic defects (low contrast, a missing translation, a broken resume link, a theme flash…) to a copy of the site, one at a time. A mutant only counts as caught if a test **for the requirement it breaks** fails. The score is in [`docs/TRUST.md`](docs/TRUST.md) and re-measured in CI every week (or on demand). |
+| **Deliberate breakage (mutants)** | `npm run mutate` applies 44 realistic defects (low contrast, a missing translation, a broken resume link, a theme flash…) to a copy of the site, one at a time. A mutant only counts as caught if a test **for the requirement it breaks** fails. The score is in [`docs/TRUST.md`](docs/TRUST.md) and re-measured in CI every week (or on demand). |
 | **Tests for the tests**           | Every helper (axe scan, overflow finder, translation parity, link checks) has self-tests showing it reports a known-bad page, not just that it passes on a good one.                                                                                                                                                                                |
 | **Locator contract**              | Every page-object locator must match exactly one element in EN and in PT, so markup drift is named the moment it happens.                                                                                                                                                                                                                           |
 | **No silent errors**              | Every test fails if the page logs a console error, throws, or a same-origin request fails.                                                                                                                                                                                                                                                          |
@@ -52,6 +52,7 @@ npm test
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `npm test`                                               | Full suite against a local server on `:4173` (started automatically)                                  |
 | `npm run test:smoke`                                     | `@smoke` tests only                                                                                   |
+| `RUN_EXTERNAL=1 npx playwright test --grep @external`    | Real-network check of external links (nightly in CI)                                                  |
 | `BASE_URL=https://andrelkj.github.io npm run test:smoke` | Smoke tests against the live site                                                                     |
 | `npm run test:ui`                                        | Playwright UI mode                                                                                    |
 | `npm run report`                                         | Open the last HTML report (traces and axe results attached)                                           |
@@ -128,7 +129,8 @@ The suite is built and maintained with Claude Code. The way of working is captur
 
 - **Every PR** runs `.github/workflows/tests.yml` inside the pinned Playwright container: typecheck, lint, format check and the full suite. The HTML report is uploaded as an artifact.
 - **Every Monday, or on demand,** `.github/workflows/mutation.yml` runs every mutant on Linux (~23 min) and uploads the resulting `TRUST.md` for review. A manual run can target a few mutants with the `only` input. Pull requests still get the fast catalog check, which fails if a change makes a mutant stale.
-- **Every push to `main`** runs `.github/workflows/deploy.yml`, which publishes only the site files to GitHub Pages (Settings → Pages → Source: GitHub Actions).
+- **Every push to `main`** runs `.github/workflows/deploy.yml`: the full test workflow first (a red suite never publishes), then the Pages deploy of the site files only, then the `@smoke` tests against the live site once it serves the new commit.
+- **Every night** `.github/workflows/nightly.yml` checks the page's external links on the real network (`@external`, REQ-LINK-06) and smoke-tests the live site.
 
 ## How it's built
 
@@ -142,5 +144,5 @@ The suite is developed in phases, one pull request per phase, in small commits. 
 | 4. Visual baselines (screenshots per device × theme)                                                     | ✅ Done      |
 | 5. Coverage matrix: CI fails if a requirement has no test, or a test has no requirement                  | ✅ Done      |
 | 6. Automated mutation runner and `docs/TRUST.md` scorecard                                               | ✅ Done      |
-| 7. Claude Code skills (`qa-plan`, `pw-write-test`, `pw-review`, `pw-heal`, `a11y-triage`, `trust-audit`) | 🔄 In review |
-| 8. Deploy gated on tests, post-deploy smoke, nightly external link check                                 | Planned      |
+| 7. Claude Code skills (`qa-plan`, `pw-write-test`, `pw-review`, `pw-heal`, `a11y-triage`, `trust-audit`) | ✅ Done      |
+| 8. Deploy gated on tests, post-deploy smoke, nightly external link check, full review pass               | 🔄 In review |
