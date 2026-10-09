@@ -1,5 +1,6 @@
 name: Deploy to GitHub Pages
 
+# test → deploy → smoke: a red suite never publishes, and every publish is checked live.
 on:
   push:
     branches: [main]
@@ -15,14 +16,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    # The same gates as every PR (typecheck, lint, coverage, full suite incl. visual).
+    uses: ./.github/workflows/tests.yml
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
 
+      # Only the site is published: tests, docs and tooling never reach Pages.
       - name: Stage site files
         run: |
           mkdir _site
@@ -36,3 +45,32 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      BASE_URL: ${{ needs.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Pages' CDN can serve the previous version for a short while; wait until it serves this one.
+      - name: Wait for this commit to be live
+        run: node scripts/ci/wait-for-live.mjs "$BASE_URL" 12 10
+
+      - name: Smoke-test the live site
+        run: npx playwright test --grep @smoke --project=desktop
+
+      - name: Upload report on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: smoke-report
+          path: playwright-report/
+          retention-days: 14
