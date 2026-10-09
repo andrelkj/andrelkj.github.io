@@ -37,6 +37,9 @@ for (const lang of LANGS) {
       for (const [name, locator] of Object.entries(locators)) {
         await expect.soft(locator, `${name} should match one element`).toHaveCount(1);
       }
+      // Collections specs loop over: a broken one would make those loops pass vacuously.
+      await expect.soft(topBar.navLinks, 'topBar.navLinks').toHaveCount(NAV_SECTIONS.length);
+      await expect.soft(portfolio.sectionHeadings, 'sectionHeadings').toHaveCount(SECTIONS.length);
     });
   });
 }
