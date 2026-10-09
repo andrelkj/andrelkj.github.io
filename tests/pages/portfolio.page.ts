@@ -82,7 +82,7 @@ export class PortfolioPage {
     this.main = page.getByRole('main');
     this.heading = page.getByRole('heading', { level: 1 });
     this.sectionHeadings = this.main.getByRole('heading', { level: 2 });
-    this.skipLink = page.locator('a.skip-link');
+    this.skipLink = page.getByRole('link', { name: /^(Skip to content|Pular para o conteúdo)$/ });
     this.footer = page.getByRole('contentinfo');
     this.footerYear = this.footer.locator('#year');
   }
