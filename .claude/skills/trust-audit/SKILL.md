@@ -56,6 +56,14 @@ Look for these by reading, briefly:
 - Areas of the site with no mutant at all (compare `scripts/mutate/mutants.ts` areas with REQUIREMENTS areas).
 - Site claims in the "Checks run on this site" panel that no requirement maps to.
 
+Then probe one or two defects that are **not** in the catalog. A 100% score only says the suite catches the defects someone already thought of; a probe shows what it does with one nobody listed. Pick visitor-facing behavior in `script.js` or `styles.css` that no mutant's snippet touches (grep `scripts/mutate/mutants.ts` for it), break it in a throwaway copy of the site (a temp directory outside the repo), and run the related areas against that copy:
+
+```bash
+SITE_DIR=<copy of the site> PORT=<unused port> npx playwright test --grep '@<area>|@<area>'
+```
+
+A probe that survives is the most useful finding an audit can produce: report what a visitor would experience and which requirement is missing or too narrow, and hand it to `qa-plan`. Leave the repo's own site files alone, and add the mutant to the catalog only together with its requirement and test.
+
 ### 5. Refresh TRUST.md (only from a full Linux run)
 
 Download the `trust-scorecard` artifact, read it (every row caught? commit SHA real? nothing rendered as raw HTML?), copy it to `docs/TRUST.md` and commit it alone:
@@ -74,12 +82,13 @@ CI never commits it; a person reviewing it is part of the guarantee.
 ```markdown
 ## Trust audit (<date>, <sha>)
 
-| Signal     | Result                              |
-| ---------- | ----------------------------------- |
-| Coverage   | <n of m requirements, gate ✅/❌>   |
-| Mutation   | <caught/scored> (<run id or local>) |
-| Flakiness  | <repeat run result>                 |
-| Self-tests | <n passed>                          |
+| Signal     | Result                                           |
+| ---------- | ------------------------------------------------ |
+| Coverage   | <n of m requirements, gate ✅/❌>                |
+| Mutation   | <caught/scored> (<run id or local>)              |
+| Flakiness  | <repeat run result>                              |
+| Self-tests | <n passed>                                       |
+| Probes     | <defects outside the catalog: caught / survived> |
 
 **Gaps:** <each with the concrete next step and skill to use>
 **Recommendation:** <trust as-is | fix X before relying on Y>
