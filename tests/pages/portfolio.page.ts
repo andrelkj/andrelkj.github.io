@@ -20,6 +20,9 @@ export const SECTIONS = [
 ] as const;
 export type Section = (typeof SECTIONS)[number];
 
+/** Lines in the hero terminal: the command, the header, five results, the summary, the prompt. */
+export const HERO_TERMINAL_LINES = 9;
+
 /**
  * The sticky header: brand, primary nav, language switch and theme toggle.
  *
@@ -84,6 +87,10 @@ export class PortfolioPage {
   /** The `h2` of every content section, in page order. */
   readonly sectionHeadings: Locator;
   readonly skipLink: Locator;
+  /** The hero's terminal: the career summary formatted as a test run. */
+  readonly heroTerminal: Locator;
+  /** Its lines, top to bottom. They fade in one by one unless the visitor prefers reduced motion. */
+  readonly heroTerminalLines: Locator;
   readonly footer: Locator;
   readonly footerYear: Locator;
 
@@ -95,17 +102,26 @@ export class PortfolioPage {
     this.heading = page.getByRole('heading', { level: 1 });
     this.sectionHeadings = this.main.getByRole('heading', { level: 2 });
     this.skipLink = page.getByRole('link', { name: /^(Skip to content|Pular para o conteúdo)$/ });
+    this.heroTerminal = page.getByRole('figure', {
+      name: /^(Career summary formatted as a passing test run|Resumo da carreira no formato de uma execução de testes aprovada)$/,
+    });
+    // By role: the title bar is aria-hidden, so only the lines of the run are paragraphs here.
+    this.heroTerminalLines = this.heroTerminal.getByRole('paragraph');
     this.footer = page.getByRole('contentinfo');
     this.footerYear = this.footer.locator('#year');
   }
 
-  /** Opens the page and waits for script.js to finish its first language pass. */
-  async goto(): Promise<void> {
+  /**
+   * Opens the page and waits for script.js to finish its first language pass and, by default, for
+   * the intro animations. `waitForIntro: false` is for the rare test about the page as it first
+   * appears: waiting ~2.8 s would let a reveal that shouldn't run finish unnoticed.
+   */
+  async goto({ waitForIntro = true }: { waitForIntro?: boolean } = {}): Promise<void> {
     await this.page.goto('/');
     // script.js sets aria-pressed on the language buttons during init; once one is pressed,
     // translations and labels have been applied.
     await this.topBar.languageSwitch.locator('[aria-pressed="true"]').waitFor();
-    await this.waitForIntroAnimations();
+    if (waitForIntro) await this.waitForIntroAnimations();
   }
 
   /**

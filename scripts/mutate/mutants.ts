@@ -102,6 +102,27 @@ export const MUTANTS: readonly Mutant[] = [
     grep: '@a11y',
     projects: COMPACT,
   },
+  {
+    id: 'M-A11Y-05',
+    description: 'Reduced motion: the hero terminal lines stay invisible',
+    file: 'styles.css',
+    mutate: replaceOnce('  .run-line { opacity: 1; }\n', ''),
+    expectedReqs: ['REQ-A11Y-05'],
+    grep: '@a11y',
+    projects: ALL_DEVICES,
+  },
+  {
+    id: 'M-A11Y-06',
+    description: 'Reduced motion: animations still run (the terminal reveals line by line)',
+    file: 'styles.css',
+    mutate: replaceOnce(
+      '{ animation: none !important; transition: none !important; }',
+      '{ transition: none !important; }',
+    ),
+    expectedReqs: ['REQ-A11Y-05'],
+    grep: '@a11y',
+    projects: ALL_DEVICES,
+  },
 
   // ---------- Theme ----------
   {

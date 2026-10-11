@@ -1,6 +1,8 @@
 import { expect, req, test } from '../fixtures/test';
+import { HERO_TERMINAL_LINES } from '../pages/portfolio.page';
 import { scanA11y } from '../support/axe';
 import { collectFocusStops, tabKey } from '../support/keyboard';
+import { findFadedOrAnimated } from '../support/motion';
 import { THEME_LANG_MATRIX } from '../support/types';
 
 test.describe('accessibility', { tag: '@a11y' }, () => {
@@ -93,4 +95,22 @@ test.describe('accessibility', { tag: '@a11y' }, () => {
       await expect(focused).toBeInViewport();
     },
   );
+
+  test.describe('with reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' });
+
+    test(
+      'every line of the hero terminal is there at once and nothing in it animates',
+      { annotation: req('REQ-A11Y-05') },
+      async ({ portfolio }) => {
+        // Look at the page as it first appears. Waiting for the intro (~2.8 s) would wait out a
+        // line-by-line reveal that must not run at all.
+        await portfolio.goto({ waitForIntro: false });
+
+        // Count first: zero lines would pass without checking anything.
+        await expect(portfolio.heroTerminalLines).toHaveCount(HERO_TERMINAL_LINES);
+        expect(await findFadedOrAnimated(portfolio.heroTerminalLines)).toEqual([]);
+      },
+    );
+  });
 });
