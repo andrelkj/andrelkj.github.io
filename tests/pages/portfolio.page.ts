@@ -59,6 +59,18 @@ export class TopBar {
   languageButton(lang: Lang): Locator {
     return this.languageSwitch.getByRole('button', { name: lang.toUpperCase(), exact: true });
   }
+
+  /**
+   * Waits until the header has finished sliding out or back in (a 0.25 s transition at ≤ 820 px).
+   * A header that has just been told to hide is still mostly on screen, so "is it in view?" only
+   * means something once it has settled. Resolves at once when nothing is moving.
+   */
+  async waitForSlideToEnd(): Promise<void> {
+    await this.root.evaluate(async (header) => {
+      // allSettled: a slide that is reversed half-way rejects `finished`, and that is settled too.
+      await Promise.allSettled(header.getAnimations().map((animation) => animation.finished));
+    });
+  }
 }
 
 /** The portfolio is a single page; this object is the only place that knows its structure. */

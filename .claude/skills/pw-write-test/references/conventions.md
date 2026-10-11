@@ -47,7 +47,7 @@ Theme/lang are seeded with storageState (once per context), not `addInitScript`,
 `portfolio.goto()` waits for script.js init and for finite intro animations. Never add a sleep after it.
 
 Members: `html` (carries `data-theme`, `lang`), `main`, `heading` (h1), `sectionHeadings`, `skipLink`, `footer`, `footerYear`, `section(id)`, `linksTo(href)`, and the methods `scrollTo(y)`, `scrollToSection(id)`, `scrollToBottom()`, `switchLanguage(lang)`, `toggleTheme()`, `waitForIntroAnimations()`, `webFontsLoaded()`, `expandViewportToFullPage()`.
-`topBar`: `root`, `nav`, `navLinks`, `currentNavLink`, `navLink(section)`, `languageSwitch`, `languageButton(lang)`, `themeToggle`, `themeIcon('sun' | 'moon')`.
+`topBar`: `root`, `nav`, `navLinks`, `currentNavLink`, `navLink(section)`, `languageSwitch`, `languageButton(lang)`, `themeToggle`, `themeIcon('sun' | 'moon')`, and `waitForSlideToEnd()` (call it before asserting that the header is _still_ in view after a scroll: a header that has just started to hide is on screen for another 0.25 s).
 Constants: `NAV_SECTIONS`, `SECTIONS`, `COMPACT_MAX_WIDTH` (820).
 
 New locator → add it to the page object **and** to the locator contract in `tests/self-test/page-object.spec.ts` (it must match exactly one element in EN and PT).

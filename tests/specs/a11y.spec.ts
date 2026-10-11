@@ -66,4 +66,31 @@ test.describe('accessibility', { tag: '@a11y' }, () => {
       expect(withoutOutline, 'stops without a visible focus outline').toEqual([]);
     },
   );
+
+  test(
+    'the header stays in view while keyboard focus is on one of its controls',
+    { annotation: req('REQ-A11Y-04') },
+    async ({ page, portfolio, browserName }) => {
+      const { topBar } = portfolio;
+      const focused = topBar.navLink('about');
+      await portfolio.goto();
+
+      await test.step('Tab to a nav link (skip link, brand, About)', async () => {
+        await collectFocusStops(page, 3, tabKey(browserName));
+        await expect(focused).toBeFocused();
+      });
+
+      await test.step('scroll down far enough for the header to hide', async () => {
+        await portfolio.scrollToSection('experience');
+        // The site handles a scroll one frame later, marking the section and deciding about the
+        // header in the same step. Once the section is marked, that decision has been made.
+        await expect(topBar.navLink('experience')).toHaveAttribute('aria-current', 'true');
+        await topBar.waitForSlideToEnd();
+      });
+
+      await expect(focused).toBeFocused();
+      await expect(topBar.root).toBeInViewport();
+      await expect(focused).toBeInViewport();
+    },
+  );
 });
