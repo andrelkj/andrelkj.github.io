@@ -1,5 +1,5 @@
 import { expect, test } from '../fixtures/test';
-import { NAV_SECTIONS, SECTIONS } from '../pages/portfolio.page';
+import { HERO_TERMINAL_LINES, NAV_SECTIONS, SECTIONS } from '../pages/portfolio.page';
 import { LANGS } from '../support/types';
 
 /**
@@ -28,6 +28,7 @@ for (const lang of LANGS) {
         main: portfolio.main,
         heading: portfolio.heading,
         skipLink: portfolio.skipLink,
+        heroTerminal: portfolio.heroTerminal,
         footer: portfolio.footer,
         footerYear: portfolio.footerYear,
         ...Object.fromEntries(NAV_SECTIONS.map((s) => [`navLink(${s})`, topBar.navLink(s)])),
@@ -40,6 +41,9 @@ for (const lang of LANGS) {
       // Collections specs loop over: a broken one would make those loops pass vacuously.
       await expect.soft(topBar.navLinks, 'topBar.navLinks').toHaveCount(NAV_SECTIONS.length);
       await expect.soft(portfolio.sectionHeadings, 'sectionHeadings').toHaveCount(SECTIONS.length);
+      await expect
+        .soft(portfolio.heroTerminalLines, 'heroTerminalLines')
+        .toHaveCount(HERO_TERMINAL_LINES);
     });
   });
 }

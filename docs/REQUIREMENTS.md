@@ -21,6 +21,8 @@ Which tests prove each requirement is generated into [`COVERAGE.md`](COVERAGE.md
 | REQ-A11Y-01 | axe finds **zero** violations (WCAG 2.2 AA + best practices) in every theme × language combination. Accepted exceptions must be scoped and unexpired (`tests/data/axe-exceptions.ts`). |
 | REQ-A11Y-02 | The skip link is the first keyboard stop, becomes visible when focused, and moves focus to the main content.                                                                           |
 | REQ-A11Y-03 | Header controls (nav links, language buttons, theme toggle) can be reached by keyboard and show a visible focus outline.                                                               |
+| REQ-A11Y-04 | While keyboard focus is on a header control, the header stays in view when the page scrolls down (at ≤ 820 px it would otherwise hide), so the focused control stays on screen.        |
+| REQ-A11Y-05 | When the visitor prefers reduced motion, every line of the hero terminal is visible as soon as the page loads, and nothing in the terminal animates.                                   |
 
 ## Theme
 
@@ -87,6 +89,6 @@ The page's "Checks run on this site" panel makes seven claims. This is where eac
 | Layout at 375 / 768 / 1280 px: no horizontal overflow                                    | REQ-RESP-01                                                      |
 | Every mobile nav tab ≥ 44 px tall                                                        | REQ-RESP-02                                                      |
 | EN / PT-BR: every string translated, nav fits in both languages                          | REQ-I18N-01, REQ-I18N-07, REQ-RESP-04                            |
-| Active section correct to the last one; header hide/show, keyboard focus, reduced motion | REQ-NAV-01, REQ-RESP-03, REQ-A11Y-02, REQ-A11Y-03                |
+| Active section correct to the last one; header hide/show, keyboard focus, reduced motion | REQ-NAV-01, REQ-RESP-03, REQ-A11Y-02…05                          |
 | Links and assets resolve (resume PDF, icon); no console errors                           | REQ-LINK-01…05, REQ-HEALTH-02                                    |
 | Content: claims checked against the resume; scan for internal jargon                     | Not automated: this is an editorial review, not a page behavior. |

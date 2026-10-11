@@ -44,11 +44,11 @@ Theme/lang are seeded with storageState (once per context), not `addInitScript`,
 
 ## 3. The page object
 
-`portfolio.goto()` waits for script.js init and for finite intro animations. Never add a sleep after it.
+`portfolio.goto()` waits for script.js init and for finite intro animations. Never add a sleep after it. `goto({ waitForIntro: false })` skips the animation wait, for a test about the page as it first appears (reduced motion).
 
-Members: `html` (carries `data-theme`, `lang`), `main`, `heading` (h1), `sectionHeadings`, `skipLink`, `footer`, `footerYear`, `section(id)`, `linksTo(href)`, and the methods `scrollTo(y)`, `scrollToSection(id)`, `scrollToBottom()`, `switchLanguage(lang)`, `toggleTheme()`, `waitForIntroAnimations()`, `webFontsLoaded()`, `expandViewportToFullPage()`.
-`topBar`: `root`, `nav`, `navLinks`, `currentNavLink`, `navLink(section)`, `languageSwitch`, `languageButton(lang)`, `themeToggle`, `themeIcon('sun' | 'moon')`.
-Constants: `NAV_SECTIONS`, `SECTIONS`, `COMPACT_MAX_WIDTH` (820).
+Members: `html` (carries `data-theme`, `lang`), `main`, `heading` (h1), `sectionHeadings`, `skipLink`, `heroTerminal`, `heroTerminalLines`, `footer`, `footerYear`, `section(id)`, `linksTo(href)`, and the methods `scrollTo(y)`, `scrollToSection(id)`, `scrollToBottom()`, `switchLanguage(lang)`, `toggleTheme()`, `waitForIntroAnimations()`, `webFontsLoaded()`, `expandViewportToFullPage()`.
+`topBar`: `root`, `nav`, `navLinks`, `currentNavLink`, `navLink(section)`, `languageSwitch`, `languageButton(lang)`, `themeToggle`, `themeIcon('sun' | 'moon')`, and `waitForSlideToEnd()` (call it before asserting that the header is _still_ in view after a scroll: a header that has just started to hide is on screen for another 0.25 s).
+Constants: `NAV_SECTIONS`, `SECTIONS`, `HERO_TERMINAL_LINES` (9), `COMPACT_MAX_WIDTH` (820).
 
 New locator → add it to the page object **and** to the locator contract in `tests/self-test/page-object.spec.ts` (it must match exactly one element in EN and PT).
 
@@ -102,6 +102,7 @@ Visual tests skip off Linux (baselines are Linux-only).
 | EN/PT parity                        | `readTranslations`, `findTranslationGaps`, `readAuthoredTranslations`, `readUnkeyedTexts`, `findUntranslatedUnkeyed` (support/i18n.ts) |
 | Links                               | `collectLinks`, `findUnsafeLinks`, `findBrokenAnchors`, `collectIcons`, `svgRootName` (support/links.ts)                               |
 | Keyboard                            | `collectFocusStops(page, n, tabKey(browserName))` (support/keyboard.ts)                                                                |
+| Faded or still-animating elements   | `findFadedOrAnimated(locator)` (support/motion.ts): one snapshot, no retry; opacity alone misses a reveal that still runs              |
 | Head metadata / JSON-LD             | `readMetadata`, `sameAsUrls` (support/metadata.ts)                                                                                     |
 | Horizontal visibility in a scroller | `isFullyVisibleInScroller` (support/nav.ts)                                                                                            |
 | Themes / languages                  | `THEMES`, `LANGS`, `HTML_LANG`, `THEME_LANG_MATRIX` (support/types.ts)                                                                 |

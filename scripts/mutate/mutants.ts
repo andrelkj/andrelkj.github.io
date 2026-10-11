@@ -93,6 +93,36 @@ export const MUTANTS: readonly Mutant[] = [
     expectedReqs: ['REQ-A11Y-02'],
     grep: '@a11y',
   },
+  {
+    id: 'M-A11Y-04',
+    description: 'Header hides on scroll even with keyboard focus on one of its controls',
+    file: 'script.js',
+    mutate: replaceOnce('y < 120 || topbar.querySelector(":focus-visible")) {', 'y < 120) {'),
+    expectedReqs: ['REQ-A11Y-04'],
+    grep: '@a11y',
+    projects: COMPACT,
+  },
+  {
+    id: 'M-A11Y-05',
+    description: 'Reduced motion: the hero terminal lines stay invisible',
+    file: 'styles.css',
+    mutate: replaceOnce('  .run-line { opacity: 1; }\n', ''),
+    expectedReqs: ['REQ-A11Y-05'],
+    grep: '@a11y',
+    projects: ALL_DEVICES,
+  },
+  {
+    id: 'M-A11Y-06',
+    description: 'Reduced motion: animations still run (the terminal reveals line by line)',
+    file: 'styles.css',
+    mutate: replaceOnce(
+      '{ animation: none !important; transition: none !important; }',
+      '{ transition: none !important; }',
+    ),
+    expectedReqs: ['REQ-A11Y-05'],
+    grep: '@a11y',
+    projects: ALL_DEVICES,
+  },
 
   // ---------- Theme ----------
   {
